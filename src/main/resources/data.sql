@@ -51,3 +51,16 @@ INSERT INTO mensagem(date, mensagem, chat_id, login) VALUES
 ('2022-03-29 17:11:51', 'Eai, blz?', 2, 'Larissa Menezes'), 
 ('2022-03-29 20:13:44', 'Eae, Larissa', 2, 'Alberto Cardoso'),
 ('2022-03-29 21:11:10',  'Já tá chegando?', 2, 'Alberto Cardoso');
+
+/* EVENTOS */
+INSERT INTO evento (data, descricao, imagem, nome) VALUES 
+('2022-12-25 18:30:00', 'Sorteio de uma progressiva', null, 'Progressiva - Fim de Ano'),
+('2022-12-25 13:00:00', 'Sorteio Aleatório Teste', null, 'Sorteio de teste');
+
+/* EVENTO E CLIENTES
+  -> Muitos eventos têm muitos clientes;
+  -> login é a FK de cliente*/
+INSERT INTO evento_cliente (evento_id, login) VALUES 
+(1, 'Maria Joana'),
+(1, 'Larissa Bonetti'),
+(1, 'Larissa Menezes');
