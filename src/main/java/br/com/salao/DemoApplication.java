@@ -36,7 +36,7 @@ public class DemoApplication implements CommandLineRunner {
 		Chat chat = chatRep.findById(2L).get();
 		List<Mensagem> msgs = chat.getMsgs();
 		msgs.forEach(x -> {
-			System.out.println(chat.getNome()+", "+ x.getMensagem() +", data: " + sdf.format(Date.from(x.getDate()))+", enviado por: " + x.getCliente().getLogin());
+			System.out.println(chat.getNome()+", "+ x.getMensagem() +", data: " + sdf.format(Date.from(x.getData()))+", enviado por: " + x.getCliente().getLogin());
 		});
 	}
 
