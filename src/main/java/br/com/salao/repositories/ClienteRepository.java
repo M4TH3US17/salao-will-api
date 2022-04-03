@@ -7,5 +7,4 @@ import br.com.salao.entidades.Cliente;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, String> {
-
 }
