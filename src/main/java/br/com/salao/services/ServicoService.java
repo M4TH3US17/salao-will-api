@@ -25,6 +25,10 @@ public class ServicoService {
 		return repository.findAllByCategory(category, pageable);
 	}
 	
+	public Page<Servico> findByName(String name, String category, Pageable pageable) {
+		return repository.findByNameAndCategory(name, category, pageable);
+	}
+	
 	public Servico findById(Long id) {
 		Servico obj = repository.findById(id).orElse(new Servico());
 		return obj;

@@ -14,4 +14,10 @@ public interface ServicoRepository extends JpaRepository<Servico, Long> {
 	@Query("SELECT servico FROM Servico servico "
 			+ "WHERE UPPER(servico.categoria) LIKE UPPER(CONCAT('%', TRIM(?1),'%'))")
 	Page<Servico> findAllByCategory(String category, Pageable pageable);
+	
+	@Query("SELECT s FROM Servico s "
+			+ "WHERE UPPER(s.nome) LIKE UPPER(CONCAT('%', TRIM(?1),'%')) "
+			+ "AND "
+			+ "UPPER(s.categoria) LIKE UPPER(CONCAT('%', TRIM(?2),'%'))")
+	Page<Servico> findByNameAndCategory(String name, String category, Pageable pageable);
 }

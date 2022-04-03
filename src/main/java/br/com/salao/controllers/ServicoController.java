@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.salao.entidades.Servico;
@@ -34,6 +35,12 @@ public class ServicoController {
 	@GetMapping(value = "/categoria/{categoria}")
 	public ResponseEntity<Page<Servico>> findAllByCategory(@PathVariable("categoria") String categoria, Pageable pageable){
 		return ResponseEntity.ok().body(service.findAllByCategory(categoria, pageable));
+	}
+	
+	@GetMapping(produces = "application/json")
+	public ResponseEntity<Page<Servico>> findByNameAndCategory(@RequestParam String name,
+			@RequestParam String category, Pageable pageable){
+		return ResponseEntity.ok().body(service.findByName(name, category, pageable));
 	}
 	
 	@GetMapping(value = "/{id}", produces = "application/json")
