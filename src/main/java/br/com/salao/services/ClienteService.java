@@ -30,11 +30,17 @@ public class ClienteService {
 
 	@Transactional
 	public Cliente save(Cliente obj) {
+		if(repository.existsById(obj.getLogin())) {
+			// lançar um erro informando que já existe um usuário com o login informado
+		}
 		return repository.save(obj);
 	}
 
 	@Transactional
 	public void deleteByLogin(String login) {
+		if(repository.existsById(login) == false) {
+			// ClienteNotFoundException
+		}
 		repository.deleteById(login);
 	}
 
