@@ -64,39 +64,39 @@ INSERT INTO evento_cliente (evento_id, login) VALUES
 (1, 'Larissa Bonetti'),
 (1, 'Larissa Menezes');
 
-/* CATEGORIA (de serviço)*/
+/* CATEGORIA (de serviço)
 INSERT INTO categoria (nome) VALUES 
 ('Manicure'), 
 ('Depilação'), 
 ('Cabelo'), 
-('Sobrancelhas');
+('Sobrancelhas');*/
 
 /* SERVIÇOS 
    -> Cada serviço pertence a uma categoria
    -> Serviço aponta para categoria com @ManyToOne*/
-INSERT INTO servico (nome, descricao, preco, categoria_id, imagem) VALUES 
-('Pé e Mão', null, 50.00, 1, null), 
-('Mão', null, 30.00, 1, null), 
-('Pé', null, 30.00, 1, null),
-('Francesinha', null, 20.00, 1, null),
-('Desenho', null, 50.00, 1, null),
-('Unha de Silicone', null, 70.00, 1, null), 
-('Unha Postiça', null, 50.00, 1, null),
-('Unha de Gel', null, 70.00, 1, null);
+INSERT INTO servico (nome, descricao, preco, categoria, imagem) VALUES 
+('Pé e Mão', null, 50.00, 'MANICURE', null), 
+('Mão', null, 30.00, 'MANICURE', null), 
+('Pé', null, 30.00, 'MANICURE', null),
+('Francesinha', null, 20.00, 'MANICURE', null),
+('Desenho', null, 50.00, 'MANICURE', null),
+('Unha de Silicone', null, 70.00, 'MANICURE', null), 
+('Unha Postiça', null, 50.00, 'MANICURE', null),
+('Unha de Gel', null, 70.00, 'MANICURE', null);
 
-INSERT INTO servico (nome, descricao, preco, categoria_id, imagem) 
+INSERT INTO servico (nome, descricao, preco, categoria, imagem) 
 VALUES 
-('Virilha', null, 70.00, 2, null),
-('Rosto', null, 50.00, 2, null),
-('Sobrancelhas', null, 20.00, 2, null),
-('Axilas', null, 30.00, 2, null),
-('Perna', null, 20.00, 2, null);
+('Virilha', null, 70.00, 'DEPILACAO', null),
+('Rosto', null, 50.00, 'DEPILACAO', null),
+('Sobrancelhas', null, 20.00, 'DEPILACAO', null),
+('Axilas', null, 30.00, 'DEPILACAO', null),
+('Perna', null, 20.00, 'DEPILACAO', null);
 
-INSERT INTO servico (nome, descricao, preco, categoria_id, imagem) 
+INSERT INTO servico (nome, descricao, preco, categoria, imagem) 
 VALUES 
-('Mechas', null, 40.00, 3, null), 
-('Relaxamento', null, 50.00, 3, null), 
-('Coloração', null, 60.00, 3, null), 
-('Baby Lise', null, 50.00, 3, null), 
-('Aplicação', null, 40.00, 3, null),
-('Escova', null, 50.00, 3, null);
+('Mechas', null, 40.00, 'CABELO', null), 
+('Relaxamento', null, 50.00, 'CABELO', null), 
+('Coloração', null, 60.00, 'CABELO', null), 
+('Baby Lise', null, 50.00, 'CABELO', null), 
+('Aplicação', null, 40.00, 'CABELO', null),
+('Escova', null, 50.00, 'CABELO', null);
