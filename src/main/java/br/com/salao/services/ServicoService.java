@@ -21,6 +21,10 @@ public class ServicoService {
 		return repository.findAll(pageable);
 	}
 	
+	public Page<Servico> findAllByCategory(String category, Pageable pageable){
+		return repository.findAllByCategory(category, pageable);
+	}
+	
 	public Servico findById(Long id) {
 		Servico obj = repository.findById(id).orElse(new Servico());
 		return obj;

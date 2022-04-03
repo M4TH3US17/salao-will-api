@@ -31,6 +31,11 @@ public class ServicoController {
 		return ResponseEntity.ok().body(service.findByPagination(pageable));
 	}
 	
+	@GetMapping(value = "/categoria/{categoria}")
+	public ResponseEntity<Page<Servico>> findAllByCategory(@PathVariable("categoria") String categoria, Pageable pageable){
+		return ResponseEntity.ok().body(service.findAllByCategory(categoria, pageable));
+	}
+	
 	@GetMapping(value = "/{id}", produces = "application/json")
 	public ResponseEntity<Servico> findById(@PathVariable Long id) {
 		return ResponseEntity.ok().body(service.findById(id));
