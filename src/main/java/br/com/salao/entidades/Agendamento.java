@@ -12,9 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +25,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "agendamento")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @NoArgsConstructor @Getter @Setter @AllArgsConstructor
 public class Agendamento implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -32,7 +35,9 @@ public class Agendamento implements Serializable {
 	private Long id;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT")
 	private Instant data;
-	private Double total;
+	
+	@OneToOne
+	private Cliente cliente;
 	
 	@ManyToMany
 	@JoinTable(
@@ -40,6 +45,14 @@ public class Agendamento implements Serializable {
 			joinColumns = @JoinColumn(name = "agendamento_id"),
 			inverseJoinColumns = @JoinColumn(name = "servico_id"))
 	private List<Servico> servicos;
+	
+	public Double getTotal() {
+		double sum = 0.0;
+		for(Servico x: servicos) {
+			sum += x.getPreco();
+		}
+		return sum;
+	}
 
 	@Override
 	public int hashCode() {
