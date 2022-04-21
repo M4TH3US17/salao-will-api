@@ -1,8 +1,11 @@
 package br.com.salao.controllers;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,6 +32,12 @@ public class AgendamentoController {
 	@GetMapping(value = "/pagination", produces = "application/json")
 	public ResponseEntity<Page<Agendamento>> findByPagination(Pageable pageable){
 		return ResponseEntity.ok().body(service.findByPagination(pageable));
+	}
+	
+	@GetMapping(value = "/filtro", produces = "application/json")
+	public ResponseEntity<Page<Agendamento>> findAllSchedulingByDate(
+		@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate data, Pageable pageable) {
+		return ResponseEntity.ok().body(service.findAllSchedulingByDate(data, pageable));
 	}
 	
 	@GetMapping(value = "/{id}", produces = "application/json")

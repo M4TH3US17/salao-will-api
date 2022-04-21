@@ -1,7 +1,7 @@
 package br.com.salao.entidades;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,7 +34,7 @@ public class Agendamento implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT")
-	private Instant data;
+	private LocalDateTime data;
 	
 	@OneToOne
 	private Cliente cliente;

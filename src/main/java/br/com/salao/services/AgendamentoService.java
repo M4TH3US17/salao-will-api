@@ -1,5 +1,7 @@
 package br.com.salao.services;
 
+import java.time.LocalDate;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,10 @@ public class AgendamentoService {
 		return repository.findAll(pageable);
 	}
 
+	public Page<Agendamento> findAllSchedulingByDate(LocalDate date, Pageable pageable) {
+		return repository.findAllSchedulingByDate(date, pageable);
+	}
+	
 	public Agendamento findById(Long id) {
 		if (repository.existsById(id) == false) {
 
@@ -33,6 +39,7 @@ public class AgendamentoService {
 		/*if(repository.existsById(obj.getId())) {
 			// lançar um erro informando que já existe um usuário com o login informado
 		}*/
+		
 		return repository.save(obj);
 	}
 
