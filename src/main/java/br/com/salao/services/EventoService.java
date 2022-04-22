@@ -37,6 +37,7 @@ public class EventoService {
 	}
 
 	private void updateData(Evento entity, Evento event) {
+		entity.setNome(event.getNome());
 		entity.setData(event.getData());
 		entity.setImagem(event.getImagem());
 		entity.setDescricao(event.getDescricao());
@@ -52,18 +53,23 @@ public class EventoService {
 
 	/* EVENTOS */
 	public Evento randomCostomerEvent() {
-		List<Cliente> clientes = clienteRepository.findAll();
-		List<Servico> servicos = servicoRepository.findAll();
 		Evento randomCostomerEvent = findById(2L);
-
-		randomCostomerEvent.setParticipantes(clientes);
-
-		Collections.shuffle(clientes);
-		randomCostomerEvent.setGanhador(clientes.get(0));
-
-		Collections.shuffle(servicos);
-		randomCostomerEvent.setPremio(servicos.get(0));
+		randomCostomerEvent.setParticipantes(clienteRepository.findAll());
+		randomCostomerEvent.setPremio(prizeDraw());
+		randomCostomerEvent.setGanhador(costumerDraw());
 
 		return update(2L, randomCostomerEvent);
+	}
+	
+	/* métodos auxiliares*/
+	public Servico prizeDraw() {
+		List<Servico> premio = servicoRepository.findAll();
+		Collections.shuffle(premio);
+		return premio.get(0);
+	}
+	public Cliente costumerDraw() {
+		List<Cliente> ganhador = clienteRepository.findAll();
+		Collections.shuffle(ganhador);
+		return ganhador.get(0);
 	}
 }
