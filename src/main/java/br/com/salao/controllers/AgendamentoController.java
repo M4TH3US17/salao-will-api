@@ -56,6 +56,12 @@ public class AgendamentoController {
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
+	@DeleteMapping(value = "/limpar-agenda")
+	public ResponseEntity<Void> clearSchedule(){
+		service.clearSchedule();
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+	
 	@PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Agendamento> update(@PathVariable Long id, @RequestBody Agendamento obj){
 		return ResponseEntity.ok().body(service.update(id, obj));

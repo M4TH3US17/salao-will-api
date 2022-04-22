@@ -50,6 +50,11 @@ public class AgendamentoService {
 		}
 		repository.deleteById(id);
 	}
+	
+	@Transactional
+	public void clearSchedule() {
+		repository.clearSchedule();
+	}
 
 	@Modifying
 	@Transactional

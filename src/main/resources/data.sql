@@ -78,11 +78,13 @@ VALUES
 INSERT INTO agendamento(cliente_login, data) VALUES 
 ('Matheus Dalvino', '2022-03-17 14:35:00'),
 ('Larissa Menezes', '2022-03-17 15:20:00'),
-('Maria Joana', '2022-03-18 13:00:00');
+('Maria Joana', '2022-03-18 13:00:00'),
+('Pedro Cardoso', '2022-04-21 10:00:00');
 
 INSERT INTO AGENDAMENTO_SERVICO(agendamento_id, servico_id) VALUES 
 (1, 1),
 (1, 10), 
 (2, 11),
 (3, 18),
-(3, 7);
+(3, 7),
+(4, 1);
