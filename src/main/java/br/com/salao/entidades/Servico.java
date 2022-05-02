@@ -34,6 +34,10 @@ public class Servico implements Serializable {
 	private Double preco;
 	private String descricao;
 	
+	public Servico(Long id) {
+		this.id = id;
+	}
+	
 	@Column(name = "categoria")
 	@Enumerated(EnumType.STRING)
 	private Categoria categoria;
@@ -53,6 +57,4 @@ public class Servico implements Serializable {
 		Servico other = (Servico) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
 }
