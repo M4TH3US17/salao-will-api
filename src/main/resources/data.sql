@@ -1,23 +1,32 @@
+/* EMAIL DOS CLIENTES */
+INSERT INTO email_clientes(email, confirmation_code, confirmed) VALUES 
+('matheusdalvino@gmail.com', 0000, false), 
+('maria@gmail.com', 0000, false), 
+('pedro@gmail.com', 0000, false), 
+('junior@gmail.com', 0000, false), 
+('larissa.bonetti@gmail.com', 0000, false), 
+('larissa.menezes@gmail.com', 0000, false),
+('alberto@gmail.com', 0000, false);
 /* CLIENTES */
-INSERT INTO cliente (login, email, senha, contato) 
+INSERT INTO cliente (login, email_cliente, senha, contato) 
 VALUES ('Matheus Dalvino', 'matheusdalvino@gmail.com', 'matheus123', '(00) 00000-0000');
 
-INSERT INTO cliente (login, email, senha, contato) 
+INSERT INTO cliente (login, email_cliente, senha, contato) 
 VALUES ('Maria Joana', 'maria@gmail.com', 'maria123', '(00) 00000-0000');
 
-INSERT INTO cliente (login, email, senha, contato) 
+INSERT INTO cliente (login, email_cliente, senha, contato) 
 VALUES ('Pedro Cardoso', 'pedro@gmail.com', 'pedro123', '(00) 00000-0000');
 
-INSERT INTO cliente (login, email, senha, contato)
+INSERT INTO cliente (login, email_cliente, senha, contato)
 VALUES ('Júnior Pimentel', 'junior@gmail.com', 'junior123', '(00) 00000-0000');
 
-INSERT INTO cliente (login, email, senha, contato) 
+INSERT INTO cliente (login, email_cliente, senha, contato) 
 VALUES ('Larissa Bonetti', 'larissa.bonetti@gmail.com', 'larissa123', '(00) 00000-0000');
 
-INSERT INTO cliente (login, email, senha, contato) 
+INSERT INTO cliente (login, email_cliente, senha, contato) 
 VALUES ('Larissa Menezes', 'larissa.menezes@gmail.com', 'larissa123', '(00) 00000-0000');
 
-INSERT INTO cliente (login, email, senha, contato) 
+INSERT INTO cliente (login, email_cliente, senha, contato) 
 VALUES ('Alberto Cardoso', 'alberto@gmail.com', 'alberto123', '(00) 00000-0000');
 
 /* EVENTOS */

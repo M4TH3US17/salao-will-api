@@ -3,14 +3,19 @@ package br.com.salao.entidades;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import br.com.salao.email.EmailCliente;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,9 +32,12 @@ public class Cliente implements Serializable {
 	@Id
 	@Column(unique = true)
 	private String login;
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String senha;
 	private String contato;
-	private String email;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="email_cliente")
+	private EmailCliente emailCliente;
 	@Lob
 	@Column(nullable = true)
 	private Byte[] foto;

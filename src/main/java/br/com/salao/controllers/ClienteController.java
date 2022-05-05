@@ -51,5 +51,9 @@ public class ClienteController {
 	public ResponseEntity<Cliente> update(@PathVariable String login, @RequestBody Cliente obj){
 		return ResponseEntity.ok().body(service.update(login, obj));
 	}
-
+	
+	/*@PutMapping(value = "/email-confirm", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<String> confirmEmail(@RequestParam Integer code){
+		return ResponseEntity.ok().body(service.confirmEmail(code));
+	}*/
 }

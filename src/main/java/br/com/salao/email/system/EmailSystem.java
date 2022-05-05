@@ -1,4 +1,4 @@
-package br.com.salao.config.email;
+package br.com.salao.email.system;
 
 import java.util.Properties;
 
@@ -12,8 +12,10 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 
-public class Email {
+@Configuration
+public class EmailSystem {
 
 	@Value("${account.gmail.sender}")
 	private String sender;
@@ -47,21 +49,21 @@ public class Email {
 		return InternetAddress.parse(to);
 	}
 
-	public Message message(String titleEmail, String bodyEmail, String recipients,
-			boolean sendWithHtml) throws Exception {
+	protected Message message(String titleEmail, String bodyEmail, String recipients, boolean sendWithHtml) {
 		Message message = new MimeMessage(session());
-
-		message.setFrom(new InternetAddress(email, sender));
-		message.setSubject(titleEmail);
-		if (sendWithHtml) {
-			message.setContent(bodyEmail, "text/html; charset=utf-8");
-		} else {
-			message.setText(bodyEmail);
+		try {
+			message.setFrom(new InternetAddress(email, sender));
+			message.setSubject(titleEmail);
+			if (sendWithHtml) {
+				message.setContent(bodyEmail, "text/html; charset=utf-8");
+			} else {
+				message.setText(bodyEmail);
+			}
+			message.setRecipients(Message.RecipientType.TO, sendTo(recipients));
+			Transport.send(message);
+		} catch (Exception e) {
+			System.err.println("Falha ao enviar email! :/");
 		}
-		message.setRecipients(Message.RecipientType.TO, sendTo(recipients));
-		Transport.send(message);
-
 		return message;
 	}
-
 }
