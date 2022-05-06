@@ -10,7 +10,7 @@ public class EmailSystemFactoryService {
 	private EmailSystem email;
 	
 	public void confirmationEmail(String recipient, Integer code, String user) {
-		String link = "http://localhost:8081/api/v1/clientes/email-confirm";
+		String link = "#"; // aqui devo colocar a URL da tela que vai consumir o confirmEmail
 		String msg = "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
                 "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +

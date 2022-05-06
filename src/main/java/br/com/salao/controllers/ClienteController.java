@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.salao.entidades.Cliente;
+import br.com.salao.entidades.dto.ConfirmationEmailDTO;
 import br.com.salao.services.ClienteService;
 
 @RestController
@@ -52,8 +53,9 @@ public class ClienteController {
 		return ResponseEntity.ok().body(service.update(login, obj));
 	}
 	
-	/*@PutMapping(value = "/email-confirm", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<String> confirmEmail(@RequestParam Integer code){
-		return ResponseEntity.ok().body(service.confirmEmail(code));
-	}*/
+	@PutMapping(value = "/confirmar/{user}", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<String> confirmEmail(@PathVariable("user") String user, 
+			@RequestBody ConfirmationEmailDTO code){
+		return ResponseEntity.ok().body(service.confirmEmail(user, code));
+	}
 }

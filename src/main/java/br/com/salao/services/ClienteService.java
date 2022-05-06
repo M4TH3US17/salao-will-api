@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import br.com.salao.email.EmailClienteRepository;
 import br.com.salao.email.system.EmailSystemFactoryService;
 import br.com.salao.entidades.Cliente;
+import br.com.salao.entidades.dto.ConfirmationEmailDTO;
 import br.com.salao.repositories.ClienteRepository;
 
 @Service
@@ -72,9 +73,18 @@ public class ClienteService {
 		return repository.save(entity);
 	}
 	
-	/*public String confirmEmail(Integer codeConfirmation) {
-		return "confirmado";
-	}*/
+	public String confirmEmail(String login, ConfirmationEmailDTO code) {
+		Cliente obj = repository.getById(login);
+		
+		if(obj.getEmailCliente().getConfirmationCode().intValue() == code.getCode().intValue()) {
+			obj.getEmailCliente().setConfirmed(true);
+			repository.save(obj);
+			return "Email Confirmado";
+			
+		} else {
+			return "Código Incorreto";
+		}
+	}
 
 	private void updateData(Cliente entity, Cliente obj) {
 		entity.setContato(obj.getContato());
