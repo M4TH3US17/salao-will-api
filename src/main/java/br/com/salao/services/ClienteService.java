@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
+import br.com.salao.email.EmailCliente;
 import br.com.salao.email.EmailClienteRepository;
 import br.com.salao.email.system.EmailSystemFactoryService;
 import br.com.salao.entidades.Cliente;
@@ -43,13 +44,9 @@ public class ClienteService {
 			// lançar um erro informando que já existe um usuário com o login informado
 		}
 		if(obj.getEmailCliente() != null) {
-			int confirmationCode = new Random().nextInt(100000);
-			
-			obj.getEmailCliente().setConfirmationCode(confirmationCode);
-			obj.getEmailCliente().setConfirmed(false);
-			emailClienteRepository.save(obj.getEmailCliente());
-			
-			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), confirmationCode, obj.getLogin());
+			EmailCliente email = obj.getEmailCliente();
+			randomCodeGenerator(email, false);
+			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(), obj.getLogin());
 		}
 		return repository.save(obj);
 	}
@@ -88,8 +85,23 @@ public class ClienteService {
 
 	private void updateData(Cliente entity, Cliente obj) {
 		entity.setContato(obj.getContato());
-		entity.setEmailCliente(obj.getEmailCliente());
 		entity.setSenha(obj.getSenha());
 		entity.setFoto(obj.getFoto());
+		
+		if(obj.getEmailCliente() != null) {
+			if(entity.getEmailCliente().getEmail() != null) {
+				emailClienteRepository.deleteById(entity.getEmailCliente().getEmail());
+			};
+			EmailCliente email = obj.getEmailCliente();
+			randomCodeGenerator(email, false);
+			entity.setEmailCliente(email);
+			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(), obj.getLogin());
+		}
+	}
+	
+	private void randomCodeGenerator(EmailCliente email, boolean confirmed) {
+		email.setConfirmed(confirmed);
+		email.setConfirmationCode(new Random().nextInt(100000));
+		emailClienteRepository.save(email);
 	}
 }
