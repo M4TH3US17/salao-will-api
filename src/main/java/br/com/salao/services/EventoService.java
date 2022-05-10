@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import br.com.salao.email.system.EmailSystemFactoryService;
 import br.com.salao.entidades.*;
 import br.com.salao.repositories.*;
 
@@ -18,6 +19,8 @@ public class EventoService {
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private ServicoRepository servicoRepository;
+	@Autowired
+	private EmailSystemFactoryService emailSystemFactoryService;
 
 	public Page<Evento> findByPagination(Pageable pageable) {
 		return repository.findAll(pageable);
@@ -55,8 +58,17 @@ public class EventoService {
 	public Evento randomCostomerEvent() {
 		Evento randomCostomerEvent = findById(2L);
 		randomCostomerEvent.setParticipantes(clienteRepository.findAll());
+		
 		randomCostomerEvent.setPremio(prizeDraw());
-		randomCostomerEvent.setGanhador(costumerDraw());
+		Cliente cliente = costumerDraw();
+		randomCostomerEvent.setGanhador(cliente);
+		
+		if(cliente.getEmailCliente().getEmail() != null && cliente.getEmailCliente().getConfirmed() == true) {
+			emailSystemFactoryService.alertEventEmail(
+					cliente.getEmailCliente().getEmail(), 
+					randomCostomerEvent.getPremio().getNome().toLowerCase(), 
+					cliente.getLogin());
+		}
 
 		return update(2L, randomCostomerEvent);
 	}
