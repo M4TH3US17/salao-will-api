@@ -1,7 +1,9 @@
 package br.com.salao.entidades;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,12 +11,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import br.com.salao.config.security.Role;
 import br.com.salao.email.EmailCliente;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,6 +45,9 @@ public class Cliente implements Serializable {
 	@Lob
 	@Column(nullable = true)
 	private Byte[] foto;
+	
+	@ManyToMany
+	private Set<Role> roles = new HashSet<>();
 	
 	@Override
 	public int hashCode() {

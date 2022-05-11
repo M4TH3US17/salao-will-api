@@ -1,6 +1,6 @@
 /* EMAIL DOS CLIENTES */
 INSERT INTO email_clientes(email, confirmation_code, confirmed) VALUES 
-('matheusdalvino@gmail.com', 0000, false), 
+('matheusdalvino50@gmail.com', 0000, false), 
 ('maria@gmail.com', 0000, false), 
 ('pedro@gmail.com', 0000, false), 
 ('junior@gmail.com', 0000, false), 
@@ -9,7 +9,7 @@ INSERT INTO email_clientes(email, confirmation_code, confirmed) VALUES
 ('alberto@gmail.com', 0000, false);
 /* CLIENTES */
 INSERT INTO cliente (login, email_cliente, senha, contato) 
-VALUES ('Matheus Dalvino', 'matheusdalvino@gmail.com', 'matheus123', '(00) 00000-0000');
+VALUES ('Matheus Dalvino', 'matheusdalvino50@gmail.com', 'matheus123', '(00) 00000-0000');
 
 INSERT INTO cliente (login, email_cliente, senha, contato) 
 VALUES ('Maria Joana', 'maria@gmail.com', 'maria123', '(00) 00000-0000');
@@ -28,6 +28,22 @@ VALUES ('Larissa Menezes', 'larissa.menezes@gmail.com', 'larissa123', '(00) 0000
 
 INSERT INTO cliente (login, email_cliente, senha, contato) 
 VALUES ('Alberto Cardoso', 'alberto@gmail.com', 'alberto123', '(00) 00000-0000');
+
+
+INSERT INTO roles (role) VALUES
+('USER'),
+('ADMIN');
+
+/*ROLE_CLIENTE*/
+INSERT INTO cliente_roles (cliente_login, roles_id) VALUES 
+('Matheus Dalvino', 2),
+('Matheus Dalvino', 1),
+('Maria Joana', 1),
+('Pedro Cardoso', 1),
+('Júnior Pimentel', 1),
+('Larissa Bonetti', 1),
+('Larissa Menezes', 1),
+('Alberto Cardoso', 1);
 
 /* EVENTOS */
 INSERT INTO evento (data, descricao, imagem, nome) VALUES 
