@@ -5,9 +5,11 @@ import java.util.Random;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.salao.email.EmailCliente;
@@ -16,6 +18,7 @@ import br.com.salao.email.system.EmailSystemFactoryService;
 import br.com.salao.entidades.Cliente;
 import br.com.salao.entidades.dto.ConfirmationEmailDTO;
 import br.com.salao.repositories.ClienteRepository;
+import br.com.salao.repositories.RoleRepository;
 
 @Service
 public class ClienteService {
@@ -24,6 +27,12 @@ public class ClienteService {
 	private ClienteRepository repository;
 	@Autowired
 	private EmailClienteRepository emailClienteRepository;
+	@Autowired
+	@Qualifier("encoder")
+	private PasswordEncoder encoder;
+	@Autowired
+	private RoleRepository roleRepository;
+	
 	@Autowired
 	private EmailSystemFactoryService emailSystemFactory;
 
@@ -43,11 +52,15 @@ public class ClienteService {
 		if(repository.existsById(obj.getLogin())) {
 			// lançar um erro informando que já existe um usuário com o login informado
 		}
+		obj.setSenha(encoder.encode(obj.getSenha()));
+		obj.getRoles().add(roleRepository.findRoleByNome("ROLE_USER"));
+		
 		if(obj.getEmailCliente() != null) {
 			EmailCliente email = obj.getEmailCliente();
 			randomCodeGenerator(email, false);
 			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(), obj.getLogin());
 		}
+		
 		return repository.save(obj);
 	}
 

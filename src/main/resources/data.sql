@@ -9,30 +9,30 @@ INSERT INTO email_clientes(email, confirmation_code, confirmed) VALUES
 ('alberto@gmail.com', 0000, false);
 /* CLIENTES */
 INSERT INTO cliente (login, email_cliente, senha, contato) 
-VALUES ('Matheus Dalvino', 'matheusdalvino50@gmail.com', 'matheus123', '(00) 00000-0000');
+VALUES ('Matheus Dalvino', 'matheusdalvino50@gmail.com', '$2a$10$Uw95mqRuMr51EDi3N16mVOoumCgQHWgMnO/jKeLK807xJeiP72QFO', '(00) 00000-0000');
 
 INSERT INTO cliente (login, email_cliente, senha, contato) 
-VALUES ('Maria Joana', 'maria@gmail.com', 'maria123', '(00) 00000-0000');
+VALUES ('Maria Joana', 'maria@gmail.com', '$2a$10$VO4XSkId/sN3iVqew7L83.fRAKJIDk5naIEtRG7GDJTcUbKYKvONe', '(00) 00000-0000');
 
 INSERT INTO cliente (login, email_cliente, senha, contato) 
-VALUES ('Pedro Cardoso', 'pedro@gmail.com', 'pedro123', '(00) 00000-0000');
+VALUES ('Pedro Cardoso', 'pedro@gmail.com', '$2a$10$xkZjIiOkIkSAGq6xPimH3el0vF9NqhvB1JzZ6Du5ZauKGw3y7gfNW', '(00) 00000-0000');
 
 INSERT INTO cliente (login, email_cliente, senha, contato)
-VALUES ('Júnior Pimentel', 'junior@gmail.com', 'junior123', '(00) 00000-0000');
+VALUES ('Júnior Pimentel', 'junior@gmail.com', '$2a$10$ix9ZxkkxZXhFHVb4QoZUPOO8/GffUi9wxjVGzBVwyVp3d35eGqyzy', '(00) 00000-0000');
 
 INSERT INTO cliente (login, email_cliente, senha, contato) 
-VALUES ('Larissa Bonetti', 'larissa.bonetti@gmail.com', 'larissa123', '(00) 00000-0000');
+VALUES ('Larissa Bonetti', 'larissa.bonetti@gmail.com', '$2a$10$DDlr13I2yqeTqnu7rtGpZeR0Bv0WhCXKYDM93X2SQieh19gDR3Ia6', '(00) 00000-0000');
 
 INSERT INTO cliente (login, email_cliente, senha, contato) 
-VALUES ('Larissa Menezes', 'larissa.menezes@gmail.com', 'larissa123', '(00) 00000-0000');
+VALUES ('Larissa Menezes', 'larissa.menezes@gmail.com', '$2a$10$iG0prWHTLZ3DhMx30HVTi.rMS05x2c6KPDedEZq5VM32CnG8L/wma', '(00) 00000-0000');
 
 INSERT INTO cliente (login, email_cliente, senha, contato) 
-VALUES ('Alberto Cardoso', 'alberto@gmail.com', 'alberto123', '(00) 00000-0000');
+VALUES ('Alberto Cardoso', 'alberto@gmail.com', '$2a$10$QBZy7EPF5LZlD3XMdfDGNe9jmYDbzxOAT0mI469BH9yU2mwsx7vW6', '(00) 00000-0000');
 
 
-INSERT INTO roles (role) VALUES
-('USER'),
-('ADMIN');
+INSERT INTO roles (nome) VALUES
+('ROLE_USER'),
+('ROLE_ADMIN');
 
 /*ROLE_CLIENTE*/
 INSERT INTO cliente_roles (cliente_login, roles_id) VALUES 

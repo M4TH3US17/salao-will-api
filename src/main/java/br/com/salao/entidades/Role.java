@@ -1,4 +1,4 @@
-package br.com.salao.config.security;
+package br.com.salao.entidades;
 
 import java.io.Serializable;
 
@@ -6,11 +6,13 @@ import javax.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 
 import lombok.*;
+
 @Entity
 @Table(name = "roles")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @NoArgsConstructor @AllArgsConstructor
 public class Role implements Serializable, GrantedAuthority {
 	private static final long serialVersionUID = 1L;
@@ -18,7 +20,7 @@ public class Role implements Serializable, GrantedAuthority {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String role;
+	private String nome;
 	
 	@JsonIgnore
 	public Long getId() {
@@ -30,14 +32,14 @@ public class Role implements Serializable, GrantedAuthority {
 	
 	@JsonIgnore
 	public String getRole() {
-		return role;
+		return nome;
 	}
 	public void setRole(String role) {
-		this.role = role;
+		this.nome = role;
 	}
 	@Override
 	public String getAuthority() {
-		return this.role;
+		return this.nome;
 	}
 	
 	

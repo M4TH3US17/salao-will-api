@@ -1,36 +1,22 @@
 package br.com.salao.entidades;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import br.com.salao.config.security.Role;
+import com.fasterxml.jackson.annotation.*;
+
 import br.com.salao.email.EmailCliente;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "cliente")
-public class Cliente implements Serializable {
+@NoArgsConstructor @AllArgsConstructor @Getter @Setter
+public class Cliente implements Serializable, UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -46,12 +32,58 @@ public class Cliente implements Serializable {
 	@Column(nullable = true)
 	private Byte[] foto;
 	
-	@ManyToMany
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "cliente_roles",
+			joinColumns = @JoinColumn(
+					name = "cliente_login", referencedColumnName = "login", 
+					table = "cliente", unique = false, 
+					foreignKey = @ForeignKey(name = "cliente_fk", value = ConstraintMode.CONSTRAINT)),
+			inverseJoinColumns = @JoinColumn(
+					name = "roles_id", referencedColumnName = "id", 
+					table = "roles", unique = false,
+					foreignKey = @ForeignKey(name = "role_fk", value = ConstraintMode.CONSTRAINT)))
 	private Set<Role> roles = new HashSet<>();
+	
+	@JsonIgnore
+	@Override
+	public String getPassword() {
+		return this.senha;
+	}
+	@JsonIgnore
+	@Override
+	public String getUsername() {
+		return this.login;
+	}
+	@JsonIgnore
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.roles;
+	}
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+	@JsonIgnore
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+	@JsonIgnore
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(login, senha);
+		return Objects.hash(login);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -62,6 +94,6 @@ public class Cliente implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Cliente other = (Cliente) obj;
-		return Objects.equals(login, other.login) && Objects.equals(senha, other.senha);
+		return Objects.equals(login, other.login);
 	}
 }
