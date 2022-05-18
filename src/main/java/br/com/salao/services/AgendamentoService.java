@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import br.com.salao.entidades.Agendamento;
+import br.com.salao.entidades.dto.AgendamentoDTO;
 import br.com.salao.repositories.AgendamentoRepository;
 import br.com.salao.repositories.ServicoRepository;
 
@@ -24,23 +25,26 @@ public class AgendamentoService {
 	@Autowired
 	private ServicoRepository servicoRpository;
 
-	public Page<Agendamento> findByPagination(Pageable pageable) {
-		return repository.findAll(pageable);
+	public Page<AgendamentoDTO> findByPagination(Pageable pageable) {
+		Page<Agendamento> list = repository.findAll(pageable);
+		return list.map(x -> new AgendamentoDTO(x, x.getCliente()));
 	}
 
-	public Page<Agendamento> findAllSchedulingByDate(LocalDate date, Pageable pageable) {
-		return repository.findAllSchedulingByDate(date, pageable);
+	public Page<AgendamentoDTO> findAllSchedulingByDate(LocalDate date, Pageable pageable) {
+		Page<Agendamento> list = repository.findAllSchedulingByDate(date, pageable);
+		return list.map(x -> new AgendamentoDTO(x, x.getCliente()));
 	}
 	
-	public Agendamento findById(Long id) {
+	public AgendamentoDTO findById(Long id) {
 		if (repository.existsById(id) == false) {
 
 		}
-		return repository.getById(id);
+		Agendamento obj = repository.getById(id);
+		return new AgendamentoDTO(obj, obj.getCliente());
 	}
 
 	@Transactional
-	public Agendamento save(Agendamento obj) {
+	public AgendamentoDTO save(Agendamento obj) {
 		/*if(repository.existsById(obj.getId())) {
 			// lançar um erro informando que já existe um usuário com o login informado
 		}*/
@@ -49,7 +53,9 @@ public class AgendamentoService {
 			ids.add(x.getId());
 		});
 		obj.setServicos(servicoRpository.findAllById(ids));
-		return repository.save(obj);
+		
+		Agendamento agendamento = repository.save(obj);
+		return new AgendamentoDTO(agendamento, agendamento.getCliente());
 	}
 
 	@Transactional
@@ -67,13 +73,15 @@ public class AgendamentoService {
 
 	@Modifying
 	@Transactional
-	public Agendamento update(Long id, Agendamento obj) {
+	public AgendamentoDTO update(Long id, Agendamento obj) {
 		if (repository.existsById(id) == false) {
 
 		}
 		Agendamento entity = repository.getById(id);
 		updateData(entity, obj);
-		return repository.save(entity);
+		
+		Agendamento agendamento = repository.save(entity);
+		return new AgendamentoDTO(agendamento, agendamento.getCliente());
 	}
 
 	private void updateData(Agendamento entity, Agendamento obj) {

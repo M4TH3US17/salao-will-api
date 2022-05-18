@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.salao.entidades.Agendamento;
+import br.com.salao.entidades.dto.AgendamentoDTO;
 import br.com.salao.services.AgendamentoService;
 
 @RestController
@@ -30,23 +31,23 @@ public class AgendamentoController {
 	private AgendamentoService service;
 	
 	@GetMapping(value = "/pagination", produces = "application/json")
-	public ResponseEntity<Page<Agendamento>> findByPagination(Pageable pageable){
+	public ResponseEntity<Page<AgendamentoDTO>> findByPagination(Pageable pageable){
 		return ResponseEntity.ok().body(service.findByPagination(pageable));
 	}
 	
 	@GetMapping(value = "/filtro", produces = "application/json")
-	public ResponseEntity<Page<Agendamento>> findAllSchedulingByDate(
+	public ResponseEntity<Page<AgendamentoDTO>> findAllSchedulingByDate(
 		@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate data, Pageable pageable) {
 		return ResponseEntity.ok().body(service.findAllSchedulingByDate(data, pageable));
 	}
 	
 	@GetMapping(value = "/{id}", produces = "application/json")
-	public ResponseEntity<Agendamento> findById(@PathVariable Long id){
+	public ResponseEntity<AgendamentoDTO> findById(@PathVariable Long id){
 		return ResponseEntity.ok().body(service.findById(id));
 	}
 	
 	@PostMapping(value = "/cadastro", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Agendamento> save(@RequestBody Agendamento obj) {
+	public ResponseEntity<AgendamentoDTO> save(@RequestBody Agendamento obj) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(obj));
 	}
 	
@@ -63,7 +64,7 @@ public class AgendamentoController {
 	}
 	
 	@PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Agendamento> update(@PathVariable Long id, @RequestBody Agendamento obj){
+	public ResponseEntity<AgendamentoDTO> update(@PathVariable Long id, @RequestBody Agendamento obj){
 		return ResponseEntity.ok().body(service.update(id, obj));
 	}
 }
