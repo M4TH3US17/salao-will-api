@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.salao.entidades.Cliente;
+import br.com.salao.entidades.dto.ClienteDTO;
 import br.com.salao.entidades.dto.ConfirmationEmailDTO;
 import br.com.salao.services.ClienteService;
 
@@ -28,17 +29,17 @@ public class ClienteController {
 	private ClienteService service;
 	
 	@GetMapping(value = "/pagination", produces = "application/json")
-	public ResponseEntity<Page<Cliente>> findByPagination (Pageable pageable){
+	public ResponseEntity<Page<ClienteDTO>> findByPagination (Pageable pageable){
 		return ResponseEntity.ok().body(service.findByPagination(pageable));
 	}
 	
 	@GetMapping(value = "/{login}", produces = "application/json")
-	public ResponseEntity<Cliente> findByLogin (@PathVariable String login){
+	public ResponseEntity<ClienteDTO> findByLogin (@PathVariable String login){
 		return ResponseEntity.ok().body(service.findByLogin(login));
 	}
 	
 	@PostMapping(value = "/cadastro", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Cliente> save(@RequestBody Cliente obj) {
+	public ResponseEntity<ClienteDTO> save(@RequestBody Cliente obj) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(obj));
 	}
 	
@@ -49,7 +50,7 @@ public class ClienteController {
 	}
 	
 	@PutMapping(value = "/{login}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Cliente> update(@PathVariable String login, @RequestBody Cliente obj){
+	public ResponseEntity<ClienteDTO> update(@PathVariable String login, @RequestBody Cliente obj){
 		return ResponseEntity.ok().body(service.update(login, obj));
 	}
 	

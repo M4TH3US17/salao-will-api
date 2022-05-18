@@ -45,37 +45,36 @@ public class Cliente implements Serializable, UserDetails {
 					foreignKey = @ForeignKey(name = "role_fk", value = ConstraintMode.CONSTRAINT)))
 	private Set<Role> roles = new HashSet<>();
 	
-	@JsonIgnore
 	@Override
 	public String getPassword() {
 		return this.senha;
 	}
-	@JsonIgnore
+	
 	@Override
 	public String getUsername() {
 		return this.login;
 	}
-	@JsonIgnore
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.roles;
 	}
-	@JsonIgnore
+	
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
-	@JsonIgnore
+
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
-	@JsonIgnore
+
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
-	@JsonIgnore
+	
 	@Override
 	public boolean isEnabled() {
 		return true;

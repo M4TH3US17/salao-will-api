@@ -16,6 +16,7 @@ import br.com.salao.email.EmailCliente;
 import br.com.salao.email.EmailClienteRepository;
 import br.com.salao.email.system.EmailSystemFactoryService;
 import br.com.salao.entidades.Cliente;
+import br.com.salao.entidades.dto.ClienteDTO;
 import br.com.salao.entidades.dto.ConfirmationEmailDTO;
 import br.com.salao.repositories.ClienteRepository;
 import br.com.salao.repositories.RoleRepository;
@@ -36,19 +37,21 @@ public class ClienteService {
 	@Autowired
 	private EmailSystemFactoryService emailSystemFactory;
 
-	public Page<Cliente> findByPagination(Pageable pageable) {
-		return repository.findAll(pageable);
+	public Page<ClienteDTO> findByPagination(Pageable pageable) {
+		Page<Cliente> list = repository.findAll(pageable);
+		Page<ClienteDTO> costumers = list.map(x -> new ClienteDTO(x));
+		return costumers;
 	}
 
-	public Cliente findByLogin(String login) {
+	public ClienteDTO findByLogin(String login) {
 		if (repository.existsById(login) == false) {
 
 		}
-		return repository.getById(login);
+		return new ClienteDTO(repository.getById(login));
 	}
 
 	@Transactional
-	public Cliente save(Cliente obj) {
+	public ClienteDTO save(Cliente obj) {
 		if(repository.existsById(obj.getLogin())) {
 			// lançar um erro informando que já existe um usuário com o login informado
 		}
@@ -61,7 +64,7 @@ public class ClienteService {
 			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(), obj.getLogin());
 		}
 		
-		return repository.save(obj);
+		return new ClienteDTO(repository.save(obj));
 	}
 
 	@Transactional
@@ -74,13 +77,13 @@ public class ClienteService {
 
 	@Modifying
 	@Transactional
-	public Cliente update(String login, Cliente obj) {
+	public ClienteDTO update(String login, Cliente obj) {
 		if (repository.existsById(login) == false) {
 
 		}
 		Cliente entity = repository.getById(login);
 		updateData(entity, obj);
-		return repository.save(entity);
+		return new ClienteDTO(repository.save(entity));
 	}
 	
 	public String confirmEmail(String login, ConfirmationEmailDTO code) {
