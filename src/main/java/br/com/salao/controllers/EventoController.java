@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.salao.entidades.Evento;
+import br.com.salao.entidades.dto.EventoDTO;
 import br.com.salao.services.EventoService;
 
 @RestController
@@ -25,22 +26,22 @@ public class EventoController {
 	private EventoService service;
 	
 	@GetMapping(value = "/pagination", produces = "application/json")
-	public ResponseEntity<Page<Evento>> findByPagination(Pageable pageable){
+	public ResponseEntity<Page<EventoDTO>> findByPagination(Pageable pageable){
 		return ResponseEntity.status(HttpStatus.OK).body(service.findByPagination(pageable));
 	}
 	
 	@GetMapping(value = "/{id}", produces = "application/json")
-	public ResponseEntity<Evento> findById(@PathVariable("id") Long id){
+	public ResponseEntity<EventoDTO> findById(@PathVariable("id") Long id){
 		return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
 	}
 	
 	@GetMapping(value = "/cliente-aleatorio", produces = "application/json")
-	public ResponseEntity<Evento> randomCostomerEvent(){
+	public ResponseEntity<EventoDTO> randomCostomerEvent(){
 		return ResponseEntity.status(HttpStatus.OK).body(service.randomCostomerEvent());
 	}
 	
 	@PutMapping(value = "/atualizar/{id}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Evento> update(@PathVariable("id") Long id, @RequestBody Evento event){
+	public ResponseEntity<EventoDTO> update(@PathVariable("id") Long id, @RequestBody Evento event){
 		return ResponseEntity.status(HttpStatus.OK).body(service.update(id, event));
 	}
 	
