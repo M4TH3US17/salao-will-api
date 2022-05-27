@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import br.com.salao.email.system.EmailSystemFactoryService;
+import br.com.salao.config.email.system.EmailSystemFactoryService;
 import br.com.salao.entidades.Cliente;
 import br.com.salao.entidades.Evento;
 import br.com.salao.entidades.Servico;

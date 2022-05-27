@@ -4,38 +4,38 @@ import java.util.Random;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import br.com.salao.email.EmailCliente;
-import br.com.salao.email.EmailClienteRepository;
-import br.com.salao.email.system.EmailSystemFactoryService;
+import br.com.salao.config.email.*;
+import br.com.salao.config.email.system.EmailSystemFactoryService;
+import br.com.salao.config.security.impl.ImplementationUserDetailsService;
+import br.com.salao.config.security.jwt.JwtService;
+import br.com.salao.config.security.jwt.dto.TokenDTO;
+import br.com.salao.controllers.exceptions.PasswordInvalidException;
 import br.com.salao.entidades.Cliente;
-import br.com.salao.entidades.dto.ClienteDTO;
-import br.com.salao.entidades.dto.ConfirmationEmailDTO;
-import br.com.salao.repositories.ClienteRepository;
-import br.com.salao.repositories.RoleRepository;
+import br.com.salao.entidades.dto.*;
+import br.com.salao.repositories.*;
+import lombok.AllArgsConstructor;
 
-@Service
+@Service @AllArgsConstructor
 public class ClienteService {
 
-	@Autowired
 	private ClienteRepository repository;
-	@Autowired
-	private EmailClienteRepository emailClienteRepository;
-	@Autowired
 	@Qualifier("encoder")
 	private PasswordEncoder encoder;
-	@Autowired
 	private RoleRepository roleRepository;
-	
-	@Autowired
+	private EmailClienteRepository emailClienteRepository;
+	private ImplementationUserDetailsService userDetailsImpl;
+
 	private EmailSystemFactoryService emailSystemFactory;
+	private JwtService jwtService;
 
 	public Page<ClienteDTO> findByPagination(Pageable pageable) {
 		Page<Cliente> list = repository.findAll(pageable);
@@ -52,24 +52,25 @@ public class ClienteService {
 
 	@Transactional
 	public ClienteDTO save(Cliente obj) {
-		if(repository.existsById(obj.getLogin())) {
+		if (repository.existsById(obj.getLogin())) {
 			// lançar um erro informando que já existe um usuário com o login informado
 		}
 		obj.setSenha(encoder.encode(obj.getSenha()));
 		obj.getRoles().add(roleRepository.findRoleByNome("ROLE_USER"));
-		
-		if(obj.getEmailCliente() != null) {
+
+		if (obj.getEmailCliente() != null) {
 			EmailCliente email = obj.getEmailCliente();
 			randomCodeGenerator(email, false);
-			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(), obj.getLogin());
+			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(),
+					obj.getLogin());
 		}
-		
+
 		return new ClienteDTO(repository.save(obj));
 	}
 
 	@Transactional
 	public void deleteByLogin(String login) {
-		if(repository.existsById(login) == false) {
+		if (repository.existsById(login) == false) {
 			// ClienteNotFoundException
 		}
 		repository.deleteById(login);
@@ -85,36 +86,56 @@ public class ClienteService {
 		updateData(entity, obj);
 		return new ClienteDTO(repository.save(entity));
 	}
-	
+
 	public String confirmEmail(String login, ConfirmationEmailDTO code) {
 		Cliente obj = repository.getById(login);
-		
-		if(obj.getEmailCliente().getConfirmationCode().intValue() == code.getCode().intValue()) {
+
+		if (obj.getEmailCliente().getConfirmationCode().intValue() == code.getCode().intValue()) {
 			obj.getEmailCliente().setConfirmed(true);
 			repository.save(obj);
 			return "Email Confirmado";
-			
+
 		} else {
 			return "Código Incorreto";
 		}
+	}
+
+	public TokenDTO authenticate(Cliente obj) throws PasswordInvalidException {
+		UserDetails client = userDetailsImpl.loadUserByUsername(obj.getLogin());
+		boolean validationPassword = encoder.matches(obj.getPassword(), client.getPassword());
+
+		if (validationPassword) {
+			
+			try {
+				Cliente object = repository.getById(obj.getLogin());
+				return new TokenDTO(object.getLogin(), jwtService.generationToken(object));
+				
+			} catch (UsernameNotFoundException e) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cheque suas credenciais (login ou senha.)");
+			}
+			
+		}
+		throw new PasswordInvalidException("Password Invalid");
 	}
 
 	private void updateData(Cliente entity, Cliente obj) {
 		entity.setContato(obj.getContato());
 		entity.setSenha(obj.getSenha());
 		entity.setFoto(obj.getFoto());
-		
-		if(obj.getEmailCliente() != null) {
-			if(entity.getEmailCliente().getEmail() != null) {
+
+		if (obj.getEmailCliente() != null) {
+			if (entity.getEmailCliente().getEmail() != null) {
 				emailClienteRepository.deleteById(entity.getEmailCliente().getEmail());
-			};
+			}
+			;
 			EmailCliente email = obj.getEmailCliente();
 			randomCodeGenerator(email, false);
 			entity.setEmailCliente(email);
-			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(), obj.getLogin());
+			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(),
+					obj.getLogin());
 		}
 	}
-	
+
 	private void randomCodeGenerator(EmailCliente email, boolean confirmed) {
 		email.setConfirmed(confirmed);
 		email.setConfirmationCode(new Random().nextInt(100000));

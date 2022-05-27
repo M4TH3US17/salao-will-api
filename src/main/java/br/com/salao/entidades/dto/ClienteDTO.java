@@ -2,7 +2,7 @@ package br.com.salao.entidades.dto;
 
 import java.io.Serializable;
 
-import br.com.salao.email.EmailCliente;
+import br.com.salao.config.email.EmailCliente;
 import br.com.salao.entidades.Cliente;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

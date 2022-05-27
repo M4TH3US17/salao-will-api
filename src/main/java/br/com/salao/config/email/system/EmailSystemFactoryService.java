@@ -1,4 +1,4 @@
-package br.com.salao.email.system;
+package br.com.salao.config.email.system;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,23 +1,13 @@
 package br.com.salao.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.*;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 
+import br.com.salao.config.security.jwt.dto.*;
 import br.com.salao.entidades.Cliente;
-import br.com.salao.entidades.dto.ClienteDTO;
-import br.com.salao.entidades.dto.ConfirmationEmailDTO;
+import br.com.salao.entidades.dto.*;
 import br.com.salao.services.ClienteService;
 
 @RestController
@@ -59,4 +49,9 @@ public class ClienteController {
 			@RequestBody ConfirmationEmailDTO code){
 		return ResponseEntity.ok().body(service.confirmEmail(user, code));
 	}
+	
+	@PostMapping(value = "/auth", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<TokenDTO> authenticate(@RequestBody CredentialsDTO credentials) throws Exception {
+		return ResponseEntity.ok(service.authenticate(new Cliente(credentials.getLogin(), credentials.getSenha())));
+	} 
 }

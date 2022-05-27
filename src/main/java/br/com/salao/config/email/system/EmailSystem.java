@@ -1,4 +1,4 @@
-package br.com.salao.email.system;
+package br.com.salao.config.email.system;
 
 import java.util.Properties;
 

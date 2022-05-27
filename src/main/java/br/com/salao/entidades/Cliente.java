@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.*;
 
-import br.com.salao.email.EmailCliente;
+import br.com.salao.config.email.EmailCliente;
 import lombok.*;
 
 @Entity
@@ -44,6 +44,11 @@ public class Cliente implements Serializable, UserDetails {
 					table = "roles", unique = false,
 					foreignKey = @ForeignKey(name = "role_fk", value = ConstraintMode.CONSTRAINT)))
 	private Set<Role> roles = new HashSet<>();
+	
+	public Cliente(String login, String senha) {
+		this.login = login;
+		this.senha = senha;
+	}
 	
 	@Override
 	public String getPassword() {
@@ -95,4 +100,5 @@ public class Cliente implements Serializable, UserDetails {
 		Cliente other = (Cliente) obj;
 		return Objects.equals(login, other.login);
 	}
+
 }

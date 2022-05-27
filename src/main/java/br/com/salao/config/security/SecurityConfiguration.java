@@ -4,23 +4,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.*;
+import org.springframework.security.config.annotation.web.configuration.*;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import br.com.salao.config.security.impl.ImplementationUserDetailsService;
+import br.com.salao.config.security.jwt.*;
 
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private ImplementationUserDetailsService userDetailsService;
+	@Autowired
+	private JwtService jwtService;
 	
 	@Override
-	public void configure(HttpSecurity http) throws Exception {
+	protected void configure(HttpSecurity http) throws Exception {
 		http
 		.csrf().disable().authorizeRequests()
 		
@@ -44,7 +48,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.DELETE, "/api/v1/servicos/**").hasRole("ADMIN")
 		.antMatchers(HttpMethod.PUT, "/api/v1/servicos/**").hasRole("ADMIN")
 		
-		.and().httpBasic();
+		.and()
+	      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	    .and()
+	      .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	@Override
@@ -63,5 +70,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Bean
 	public PasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	public OncePerRequestFilter jwtFilter() {
+		return new JwtAuthFilter(jwtService, userDetailsService);
 	}
 }
