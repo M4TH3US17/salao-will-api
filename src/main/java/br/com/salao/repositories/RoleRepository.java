@@ -9,4 +9,5 @@ import br.com.salao.entidades.Role;
 public interface RoleRepository extends JpaRepository<Role, Long>{
 	
 	Role findRoleByNome(String name);
+
 }

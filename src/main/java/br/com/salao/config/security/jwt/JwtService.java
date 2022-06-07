@@ -2,14 +2,17 @@ package br.com.salao.config.security.jwt;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import br.com.salao.entidades.Cliente;
 import io.jsonwebtoken.*;
+
 @Service
 public class JwtService {
 
-	private final String secret = "c2VjcmV0";
+	@Value("jwt.secret-key")
+	private String secret;
 	private final long expiration = 86400000;
 
 	public String generationToken(Cliente obj) {

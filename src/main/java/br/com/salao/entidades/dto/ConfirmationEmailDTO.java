@@ -2,10 +2,7 @@ package br.com.salao.entidades.dto;
 
 import java.io.Serializable;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor @AllArgsConstructor @Setter @Getter
 public class ConfirmationEmailDTO implements Serializable {

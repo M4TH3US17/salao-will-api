@@ -1,9 +1,7 @@
 package br.com.salao.repositories;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 import br.com.salao.entidades.Servico;
@@ -12,12 +10,12 @@ import br.com.salao.entidades.Servico;
 public interface ServicoRepository extends JpaRepository<Servico, Long> {
 
 	@Query("SELECT servico FROM Servico servico "
-			+ "WHERE UPPER(servico.categoria) LIKE UPPER(CONCAT('%', TRIM(?1),'%'))")
-	Page<Servico> findAllByCategory(String category, Pageable pageable);
+			+ "WHERE UPPER(servico.categoria) LIKE CONCAT('%', ?1,'%')")
+	Page<Servico> findByCategoria(String categoria, Pageable pageable);
 	
 	@Query("SELECT s FROM Servico s "
-			+ "WHERE UPPER(s.nome) LIKE UPPER(CONCAT('%', TRIM(?1),'%')) "
+			+ "WHERE UPPER(s.nome) LIKE UPPER(CONCAT('%', ?1,'%')) "
 			+ "AND "
-			+ "UPPER(s.categoria) LIKE UPPER(CONCAT('%', TRIM(?2),'%'))")
-	Page<Servico> findByNameAndCategory(String name, String category, Pageable pageable);
+			+ "UPPER(s.categoria) LIKE UPPER(CONCAT('%', ?2,'%'))")
+	Page<Servico> findByNameAndCategoria(String name, String category, Pageable pageable);
 }

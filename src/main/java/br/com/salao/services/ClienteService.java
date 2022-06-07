@@ -4,7 +4,8 @@ import java.util.Random;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
@@ -36,55 +37,47 @@ public class ClienteService {
 
 	private EmailSystemFactoryService emailSystemFactory;
 	private JwtService jwtService;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 
 	public Page<ClienteDTO> findByPagination(Pageable pageable) {
-		Page<Cliente> list = repository.findAll(pageable);
-		Page<ClienteDTO> costumers = list.map(x -> new ClienteDTO(x));
-		return costumers;
+		return repository.findAll(pageable).map(cliente -> modelMapper.map(cliente, ClienteDTO.class));
 	}
 
 	public ClienteDTO findByLogin(String login) {
-		if (repository.existsById(login) == false) {
-
-		}
-		return new ClienteDTO(repository.getById(login));
+		Cliente cliente = repository.findById(login).orElseThrow(null);
+		return modelMapper.map(cliente, ClienteDTO.class);
 	}
 
 	@Transactional
 	public ClienteDTO save(Cliente obj) {
-		if (repository.existsById(obj.getLogin())) {
-			// lançar um erro informando que já existe um usuário com o login informado
-		}
+		repository.findById(obj.getLogin()).orElseThrow(null);
 		obj.setSenha(encoder.encode(obj.getSenha()));
 		obj.getRoles().add(roleRepository.findRoleByNome("ROLE_USER"));
 
 		if (obj.getEmailCliente() != null) {
 			EmailCliente email = obj.getEmailCliente();
 			randomCodeGenerator(email, false);
-			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(),
-					obj.getLogin());
+			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(), obj.getLogin());
 		}
-
-		return new ClienteDTO(repository.save(obj));
+		
+		return modelMapper.map(repository.save(obj), ClienteDTO.class);
 	}
 
 	@Transactional
 	public void deleteByLogin(String login) {
-		if (repository.existsById(login) == false) {
-			// ClienteNotFoundException
-		}
+		repository.findById(login).orElseThrow(null);
 		repository.deleteById(login);
 	}
 
 	@Modifying
 	@Transactional
 	public ClienteDTO update(String login, Cliente obj) {
-		if (repository.existsById(login) == false) {
-
-		}
-		Cliente entity = repository.getById(login);
+		Cliente entity = repository.findById(login).orElseThrow(null);
 		updateData(entity, obj);
-		return new ClienteDTO(repository.save(entity));
+		
+		return modelMapper.map(repository.save(entity), ClienteDTO.class);
 	}
 
 	public String confirmEmail(String login, ConfirmationEmailDTO code) {
@@ -94,10 +87,8 @@ public class ClienteService {
 			obj.getEmailCliente().setConfirmed(true);
 			repository.save(obj);
 			return "Email Confirmado";
-
-		} else {
+		} else 
 			return "Código Incorreto";
-		}
 	}
 
 	public TokenDTO authenticate(Cliente obj) throws PasswordInvalidException {
@@ -105,7 +96,6 @@ public class ClienteService {
 		boolean validationPassword = encoder.matches(obj.getPassword(), client.getPassword());
 
 		if (validationPassword) {
-			
 			try {
 				Cliente object = repository.getById(obj.getLogin());
 				return new TokenDTO(object.getLogin(), jwtService.generationToken(object));
@@ -113,7 +103,6 @@ public class ClienteService {
 			} catch (UsernameNotFoundException e) {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cheque suas credenciais (login ou senha.)");
 			}
-			
 		}
 		throw new PasswordInvalidException("Password Invalid");
 	}
@@ -127,12 +116,10 @@ public class ClienteService {
 			if (entity.getEmailCliente().getEmail() != null) {
 				emailClienteRepository.deleteById(entity.getEmailCliente().getEmail());
 			}
-			;
 			EmailCliente email = obj.getEmailCliente();
 			randomCodeGenerator(email, false);
 			entity.setEmailCliente(email);
-			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(),
-					obj.getLogin());
+			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(), obj.getLogin());
 		}
 	}
 

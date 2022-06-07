@@ -3,8 +3,7 @@ package br.com.salao.services;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +21,11 @@ public class ServicoService {
 	}
 	
 	public Page<Servico> findAllByCategory(String category, Pageable pageable){
-		return repository.findAllByCategory(category, pageable);
+		return repository.findByCategoria(category.toUpperCase(), pageable);
 	}
 	
 	public Page<Servico> findByName(String name, String category, Pageable pageable) {
-		return repository.findByNameAndCategory(name, category, pageable);
+		return repository.findByNameAndCategoria(name, category, pageable);
 	}
 	
 	public Servico findById(Long id) {
@@ -47,9 +46,7 @@ public class ServicoService {
 	@Modifying
 	@Transactional
 	public Servico update(Long id, Servico obj) {
-		if(repository.existsById(id) == false) {
-			// Lançar um ServicoNotFoundException
-		}
+		repository.findById(id).orElseThrow(null);
 		Servico entity = repository.getById(id);
 		updateData(entity, obj);
 		return repository.save(entity);

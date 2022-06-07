@@ -6,13 +6,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import br.com.salao.entidades.Cliente;
-import br.com.salao.entidades.Evento;
-import br.com.salao.entidades.Servico;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import br.com.salao.entidades.*;
+import lombok.*;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class EventoDTO implements Serializable {

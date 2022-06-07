@@ -18,6 +18,10 @@ public enum Categoria {
 		return cat;
 	}
 
+	public void setCat(String cat) {
+		this.cat = cat;
+	}
+	
 	private Categoria(String categoria) {
 		this.cat = categoria;
 	}

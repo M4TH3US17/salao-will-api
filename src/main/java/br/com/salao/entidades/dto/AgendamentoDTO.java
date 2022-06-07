@@ -16,6 +16,7 @@ public class AgendamentoDTO implements Serializable {
 	private Long id;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT")
 	private LocalDateTime data;
+	private Double total;
 	
 	private ClienteDTO cliente;
 	
@@ -24,6 +25,7 @@ public class AgendamentoDTO implements Serializable {
 	public AgendamentoDTO(Agendamento agendamento, Cliente cliente) {
 		id = agendamento.getId();
 		data = agendamento.getData();
+		total = agendamento.getTotal();
 		servicos = agendamento.getServicos();
 		this.cliente = new ClienteDTO(cliente);
 	}

@@ -1,22 +1,16 @@
 package br.com.salao.services;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import br.com.salao.config.email.system.EmailSystemFactoryService;
-import br.com.salao.entidades.Cliente;
-import br.com.salao.entidades.Evento;
-import br.com.salao.entidades.Servico;
+import br.com.salao.entidades.*;
 import br.com.salao.entidades.dto.EventoDTO;
-import br.com.salao.repositories.ClienteRepository;
-import br.com.salao.repositories.EventoRepository;
-import br.com.salao.repositories.ServicoRepository;
+import br.com.salao.repositories.*;
 
 @Service
 public class EventoService {
@@ -29,30 +23,24 @@ public class EventoService {
 	private ServicoRepository servicoRepository;
 	@Autowired
 	private EmailSystemFactoryService emailSystemFactoryService;
+	@Autowired
+	private ModelMapper mapper;
 
 	public Page<EventoDTO> findByPagination(Pageable pageable) {
-		Page<Evento> list = repository.findAll(pageable);
-		return list.map(x -> new EventoDTO(x, x.getGanhador(), x.getParticipantes()));
+		return repository.findAll(pageable).map(evento -> mapper.map(evento, EventoDTO.class));
 	}
 
 	public EventoDTO findById(Long id) {
-		if (repository.existsById(id) == false) {
-
-		}
-		Evento evento = repository.findById(id).get();
-		
-		return new EventoDTO(evento, evento.getGanhador(), evento.getParticipantes());
+		Evento evento = repository.findById(id)
+				.orElseThrow(null);
+		return mapper.map(evento, EventoDTO.class);
 	}
 
 	public EventoDTO update(Long id, Evento event) {
-		if (repository.existsById(id) == false) {
-
-		}
-		Evento entity = repository.getById(id);
+		Evento entity = repository.findById(id).orElseThrow(null);
 		updateData(entity, event);
-		Evento evento = repository.save(entity);
 		
-		return new EventoDTO(evento, evento.getGanhador(), evento.getParticipantes());
+		return mapper.map(repository.save(entity), EventoDTO.class);
 	}
 
 	private void updateData(Evento entity, Evento event) {
@@ -62,15 +50,12 @@ public class EventoService {
 		entity.setDescricao(event.getDescricao());
 	}
 
-	public Evento resetEventInformation(Long id) {
-		if (repository.existsById(id) == false) {
-
-		}
-		Evento evento = repository.getById(id);
+	public EventoDTO resetEventInformation(Long id) {
+		Evento evento = repository.findById(id).orElseThrow(null);
 		evento.setParticipantes(new ArrayList<>());
 		evento.setGanhador(null);
 		evento.setPremio(null);
-		return repository.save(evento);
+		return mapper.map(repository.save(evento), EventoDTO.class);
 	}
 
 	/* EVENTOS */
@@ -82,14 +67,11 @@ public class EventoService {
 		Cliente cliente = costumerDraw();
 		randomCostomerEvent.setGanhador(cliente);
 		
-		if(cliente.getEmailCliente().getEmail() != null && cliente.getEmailCliente().getConfirmed() == true) {
-			emailSystemFactoryService.alertEventEmail(
-					cliente.getEmailCliente().getEmail(), 
-					randomCostomerEvent.getPremio().getNome().toLowerCase(), 
-					cliente.getLogin());
-		}
+		if(cliente.getEmailCliente().getEmail() != null && cliente.getEmailCliente().getConfirmed() == true)
+			emailSystemFactoryService.alertEventEmail(cliente.getEmailCliente().getEmail(), 
+					randomCostomerEvent.getPremio().getNome().toLowerCase(), cliente.getLogin());
 
-		return update(2L, randomCostomerEvent);
+		return mapper.map(update(2L, randomCostomerEvent), EventoDTO.class);
 	}
 	
 	/* métodos auxiliares*/
