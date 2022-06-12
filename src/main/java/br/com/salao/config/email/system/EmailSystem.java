@@ -43,7 +43,7 @@ public class EmailSystem {
 		return InternetAddress.parse(to);
 	}
 
-	protected Message message(String titleEmail, String bodyEmail, String recipients, boolean sendWithHtml) {
+	protected Message send(String titleEmail, String bodyEmail, String recipients, boolean sendWithHtml) {
 		Message message = new MimeMessage(session());
 		try {
 			message.setFrom(new InternetAddress(email, sender));

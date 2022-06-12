@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//PT" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Alerta de Evento</title>
+    <meta name="viewport" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+     <style>
+        * {
+            font-family: arial;
+        }
+
+        a {
+            margin-left: 5px;
+            text-decoration: none;
+        }
+
+        .cabecalho {
+            text-align: center;
+            border-radius: 3px;
+            padding: 2px;
+            background-color: black;
+            color: white;
+            box-shadow: 10px 9px 0px 0.2px #84259c;
+        }
+
+        .content {
+            font-size: 1.25em;
+            margin-left: 10px;
+            margin-right: 10px;
+            text-align: justify;
+        }
+
+        .cabecalho-subtitulo {
+            font-size: 0.78em;
+            color: #5a5a5a;
+        }
+    </style>
+</head>
+
+<body>
+     <main>
+        <header class="cabecalho">
+            <h1 class="cabecalho-titulo">
+                Sorteio da Will
+                <br><span class="cabecalho-subtitulo">Salão Willândia</span>
+            </h1>
+        </header>
+
+        <section class="content">
+            <p th:text="'Olá ' + ${usuario} +','"></p>
+            <p>
+                Você foi sorteado(a) a ganhar um <span th:text="${premio}"></span> no Salão da Will. Por favor entre em contato com
+                <strong th:text="${contatoDoSalao}"></strong> e combine uma data para realizar o procedimento.</p>
+            <p>Obrigado por fazer parte do nosso site, bjs da Will &#128536;</p>
+        </section>
+    </main>
+</body>
+</html>

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import br.com.salao.config.email.system.EmailSystemFactoryService;
+import br.com.salao.config.email.system.EmailContentBuilder;
 import br.com.salao.entidades.*;
 import br.com.salao.entidades.dto.EventoDTO;
 import br.com.salao.repositories.*;
@@ -22,7 +22,7 @@ public class EventoService {
 	@Autowired
 	private ServicoRepository servicoRepository;
 	@Autowired
-	private EmailSystemFactoryService emailSystemFactoryService;
+	private EmailContentBuilder buildEmail;
 	@Autowired
 	private ModelMapper mapper;
 
@@ -68,7 +68,7 @@ public class EventoService {
 		randomCostomerEvent.setGanhador(cliente);
 		
 		if(cliente.getEmailCliente().getEmail() != null && cliente.getEmailCliente().getConfirmed() == true)
-			emailSystemFactoryService.alertEventEmail(cliente.getEmailCliente().getEmail(), 
+			buildEmail.buildAlertEventEmail(cliente.getEmailCliente().getEmail(), 
 					randomCostomerEvent.getPremio().getNome().toLowerCase(), cliente.getLogin());
 
 		return mapper.map(update(2L, randomCostomerEvent), EventoDTO.class);

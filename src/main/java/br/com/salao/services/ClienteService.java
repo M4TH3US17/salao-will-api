@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.salao.config.email.*;
-import br.com.salao.config.email.system.EmailSystemFactoryService;
+import br.com.salao.config.email.system.EmailContentBuilder;
 import br.com.salao.config.security.impl.ImplementationUserDetailsService;
 import br.com.salao.config.security.jwt.JwtService;
 import br.com.salao.config.security.jwt.dto.TokenDTO;
@@ -35,7 +35,7 @@ public class ClienteService {
 	private EmailClienteRepository emailClienteRepository;
 	private ImplementationUserDetailsService userDetailsImpl;
 
-	private EmailSystemFactoryService emailSystemFactory;
+	private EmailContentBuilder buildEmail;
 	private JwtService jwtService;
 	
 	@Autowired
@@ -52,14 +52,14 @@ public class ClienteService {
 
 	@Transactional
 	public ClienteDTO save(Cliente obj) {
-		repository.findById(obj.getLogin()).orElseThrow(null);
+		/*repository.findById(obj.getLogin()).orElseThrow(null);*/
 		obj.setSenha(encoder.encode(obj.getSenha()));
 		obj.getRoles().add(roleRepository.findRoleByNome("ROLE_USER"));
 
 		if (obj.getEmailCliente() != null) {
 			EmailCliente email = obj.getEmailCliente();
 			randomCodeGenerator(email, false);
-			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(), obj.getLogin());
+			buildEmail.buildConfirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(), obj.getLogin());
 		}
 		
 		return modelMapper.map(repository.save(obj), ClienteDTO.class);
@@ -119,7 +119,7 @@ public class ClienteService {
 			EmailCliente email = obj.getEmailCliente();
 			randomCodeGenerator(email, false);
 			entity.setEmailCliente(email);
-			emailSystemFactory.confirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(), obj.getLogin());
+			buildEmail.buildConfirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(), obj.getLogin());
 		}
 	}
 
