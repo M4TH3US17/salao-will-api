@@ -8,9 +8,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import br.com.salao.entidades.Agendamento;
-import br.com.salao.entidades.dto.AgendamentoDTO;
-import br.com.salao.services.AgendamentoService;
+import br.com.salao.entidades.agendamento.core.model.Agendamento;
+import br.com.salao.entidades.agendamento.core.model.dto.AgendamentoDTO;
+import br.com.salao.entidades.agendamento.service.AgendamentoService;
 
 @RestController
 @CrossOrigin("*")

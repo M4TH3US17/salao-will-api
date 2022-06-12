@@ -5,8 +5,8 @@ import org.springframework.data.domain.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import br.com.salao.entidades.Servico;
-import br.com.salao.services.ServicoService;
+import br.com.salao.entidades.servico.core.model.Servico;
+import br.com.salao.entidades.servico.service.ServicoService;
 
 @RestController
 @CrossOrigin("*")

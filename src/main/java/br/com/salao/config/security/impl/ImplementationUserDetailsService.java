@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
-import br.com.salao.entidades.Cliente;
-import br.com.salao.repositories.ClienteRepository;
+import br.com.salao.entidades.cliente.core.data.ClienteRepository;
+import br.com.salao.entidades.cliente.core.model.Cliente;
 
 @Service
 public class ImplementationUserDetailsService implements UserDetailsService {

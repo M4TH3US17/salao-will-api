@@ -5,7 +5,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import br.com.salao.entidades.Cliente;
+import br.com.salao.entidades.cliente.core.model.Cliente;
 import io.jsonwebtoken.*;
 
 @Service

@@ -1,14 +1,26 @@
 package br.com.salao.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import br.com.salao.config.security.jwt.dto.*;
-import br.com.salao.entidades.Cliente;
-import br.com.salao.entidades.dto.*;
-import br.com.salao.services.ClienteService;
+import br.com.salao.config.security.jwt.dto.CredentialsDTO;
+import br.com.salao.config.security.jwt.dto.TokenDTO;
+import br.com.salao.entidades.cliente.core.model.Cliente;
+import br.com.salao.entidades.cliente.core.model.dto.ClienteDTO;
+import br.com.salao.entidades.cliente.service.ClienteService;
+import br.com.salao.entidades.email.core.model.dto.ConfirmationEmailDTO;
 
 @RestController
 @CrossOrigin("*")

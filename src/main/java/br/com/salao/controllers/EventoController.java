@@ -5,9 +5,9 @@ import org.springframework.data.domain.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import br.com.salao.entidades.Evento;
-import br.com.salao.entidades.dto.EventoDTO;
-import br.com.salao.services.EventoService;
+import br.com.salao.entidades.evento.core.model.Evento;
+import br.com.salao.entidades.evento.core.model.dto.EventoDTO;
+import br.com.salao.entidades.evento.service.EventoService;
 
 @RestController
 @CrossOrigin("*")
