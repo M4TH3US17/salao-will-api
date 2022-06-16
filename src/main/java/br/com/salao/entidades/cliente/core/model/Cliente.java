@@ -16,11 +16,13 @@ import lombok.*;
 @Entity
 @Table(name = "cliente")
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Cliente implements Serializable, UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(unique = true)
+	@EqualsAndHashCode.Include
 	private String login;
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String senha;
@@ -83,22 +85,6 @@ public class Cliente implements Serializable, UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
-	}
-	
-	@Override
-	public int hashCode() {
-		return Objects.hash(login);
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Cliente other = (Cliente) obj;
-		return Objects.equals(login, other.login);
 	}
 
 }

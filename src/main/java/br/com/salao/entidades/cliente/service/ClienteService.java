@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javax.transaction.Transactional;
 
+import br.com.salao.config.email.system.EmailBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

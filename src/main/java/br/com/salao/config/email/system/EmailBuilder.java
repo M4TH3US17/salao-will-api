@@ -5,12 +5,12 @@ import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class EmailSystem {
-
+@Configuration @Slf4j
+public class EmailBuilder {
 	@Value("${account.gmail.sender}")
 	private String sender;
 	@Value("${account.gmail.email}")
@@ -56,7 +56,7 @@ public class EmailSystem {
 			message.setRecipients(Message.RecipientType.TO, sendTo(recipients));
 			Transport.send(message);
 		} catch (Exception e) {
-			System.err.println("Falha ao enviar email! :/");
+			log.error("Falha ao enviar email! (Classe: EmailConfig)");
 		}
 		return message;
 	}

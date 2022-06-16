@@ -10,11 +10,13 @@ import lombok.*;
 @Entity
 @Table(name = "servico")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Servico implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@EqualsAndHashCode.Include
 	private Long id;
 	private String nome;
 	@Lob
@@ -29,20 +31,5 @@ public class Servico implements Serializable {
 	@Column(name = "categoria")
 	@Enumerated(EnumType.STRING)
 	private Categoria categoria;
-	
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Servico other = (Servico) obj;
-		return Objects.equals(id, other.id);
-	}
+
 }

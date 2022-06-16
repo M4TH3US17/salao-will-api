@@ -1,6 +1,7 @@
 package br.com.salao.entidades.agendamento.service;
 
 import java.time.LocalDate;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -42,7 +43,8 @@ public class AgendamentoService {
 
 	@Transactional
 	public AgendamentoDTO save(Agendamento obj) {
-		obj.setServicos(servicoRepository.findAllById(obj.getServicos().stream().map(servico -> servico.getId()).toList()));
+		obj.setServicos(servicoRepository.findAllById(obj.getServicos().stream().map(servico -> servico.getId())
+				.collect(Collectors.toList())));
 
 		return modelMapper.map(repository.save(obj), AgendamentoDTO.class);
 	}
