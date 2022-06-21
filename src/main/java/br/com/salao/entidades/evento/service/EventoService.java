@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import br.com.salao.config.email.system.EmailBuilder;
+import br.com.salao.entidades.evento.core.exceptions.EventoNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,14 +39,15 @@ public class EventoService {
 		return repository.findAll(pageable).map(evento -> mapper.map(evento, EventoDTO.class));
 	}
 
-	public EventoDTO findById(Long id) {
+	public EventoDTO findById(Long id) throws Exception {
 		Evento evento = repository.findById(id)
-				.orElseThrow(null);
+				.orElseThrow(() -> new EventoNotFoundException(("Evento com id "+id+" não foi encontrado.")));
 		return mapper.map(evento, EventoDTO.class);
 	}
 
-	public EventoDTO update(Long id, EventoDTO evento) {
-		Evento entity = repository.findById(id).orElseThrow(null);
+	public EventoDTO update(Long id, EventoDTO evento) throws Exception {
+		Evento entity = repository.findById(id)
+				.orElseThrow(() -> new EventoNotFoundException(("Evento com id "+id+" não foi encontrado.")));
 		Evento obj    = mapper.map(evento, Evento.class);
 		updateData(entity, obj);
 		
@@ -59,8 +61,9 @@ public class EventoService {
 		entity.setDescricao(event.getDescricao());
 	}
 
-	public EventoDTO resetEventInformation(Long id) {
-		Evento evento = repository.findById(id).orElseThrow(null);
+	public EventoDTO resetEventInformation(Long id) throws Exception {
+		Evento evento = repository.findById(id)
+				.orElseThrow(() -> new EventoNotFoundException(("Evento com id "+id+" não foi encontrado.")));
 		evento.setParticipantes(new ArrayList<>());
 		evento.setGanhador(null);
 		evento.setPremio(null);
@@ -68,7 +71,7 @@ public class EventoService {
 	}
 
 	/* EVENTOS */
-	public EventoDTO randomCostomerEvent() {
+	public EventoDTO randomCostomerEvent() throws Exception {
 		Evento randomCostomerEvent = repository.getById(2L);
 		randomCostomerEvent.setParticipantes(clienteRepository.findAll());
 		

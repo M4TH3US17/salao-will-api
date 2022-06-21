@@ -38,7 +38,7 @@ public class ServicoController {
 	}
 	@ApiOperation("${servico.docs.findById}")
 	@GetMapping(value = "/{id}", produces = "application/json")
-	public ResponseEntity<Servico> findById(@PathVariable Long id) {
+	public ResponseEntity<Servico> findById(@PathVariable Long id) throws Exception {
 		return ResponseEntity.ok().body(service.findById(id));
 	}
 	@ApiOperation("${servico.docs.save}")
@@ -48,13 +48,13 @@ public class ServicoController {
 	}
 	@ApiOperation("${servico.docs.deleteById}")
 	@DeleteMapping(value = "/{id}", produces = "application/json")
-	public ResponseEntity<Void> deleteById(@PathVariable Long id){
+	public ResponseEntity<Void> deleteById(@PathVariable Long id) throws Exception {
 		service.deleteById(id);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	@ApiOperation("${servico.docs.update}")
 	@PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Servico> update(@PathVariable Long id, @RequestBody Servico servico){
+	public ResponseEntity<Servico> update(@PathVariable Long id, @RequestBody Servico servico) throws Exception {
 		return ResponseEntity.ok().body(service.update(id, servico));
 	}
 }

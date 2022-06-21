@@ -39,7 +39,7 @@ public class AgendamentoController {
 	}
 	@ApiOperation("${agendamento.docs.findById}")
 	@GetMapping(value = "/{id}", produces = "application/json")
-	public ResponseEntity<AgendamentoDTO> findById(@PathVariable Long id){
+	public ResponseEntity<AgendamentoDTO> findById(@PathVariable Long id) throws Exception {
 		return ResponseEntity.ok().body(service.findById(id));
 	}
 	@ApiOperation("${agendamento.docs.save}")
@@ -49,7 +49,7 @@ public class AgendamentoController {
 	}
 	@ApiOperation("${agendamento.docs.deleteById}")
 	@DeleteMapping(value = "/{id}", produces = "application/json")
-	public ResponseEntity<Void> deleteById(@PathVariable Long id){
+	public ResponseEntity<Void> deleteById(@PathVariable Long id) throws Exception {
 		service.deleteById(id);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
@@ -61,7 +61,8 @@ public class AgendamentoController {
 	}
 	@ApiOperation("${agendamento.docs.update}")
 	@PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<AgendamentoDTO> update(@PathVariable Long id, @RequestBody AgendamentoDTO agendamento){
+	public ResponseEntity<AgendamentoDTO> update(@PathVariable Long id, @RequestBody AgendamentoDTO agendamento)
+	throws Exception {
 		return ResponseEntity.ok().body(service.update(id, agendamento));
 	}
 }

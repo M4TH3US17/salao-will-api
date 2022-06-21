@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import br.com.salao.entidades.agendamento.core.exceptions.AgendamentoNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,9 +38,10 @@ public class AgendamentoService {
 				.map(obj -> modelMapper.map(obj, AgendamentoDTO.class));
 	}
 
-	public AgendamentoDTO findById(Long id) {
-		return repository.findById(id).map(obj -> modelMapper.map(obj, AgendamentoDTO.class))
-				.orElseThrow(null);
+	public AgendamentoDTO findById(Long id) throws Exception {
+		Agendamento agendamento = repository.findById(id)
+				.orElseThrow(() -> new AgendamentoNotFoundException("Agendamento com id " + id + " não foi encontrado."));
+		return modelMapper.map(agendamento, AgendamentoDTO.class);
 	}
 
 	@Transactional
@@ -53,8 +55,9 @@ public class AgendamentoService {
 	}
 
 	@Transactional
-	public void deleteById(Long id) {
-		repository.findById(id).orElseThrow(null);
+	public void deleteById(Long id) throws Exception {
+		repository.findById(id)
+				.orElseThrow(() -> new AgendamentoNotFoundException("Agendamento com id " + id + " não foi encontrado."));
 		repository.deleteById(id);
 	}
 
@@ -65,8 +68,9 @@ public class AgendamentoService {
 
 	@Modifying
 	@Transactional
-	public AgendamentoDTO update(Long id, AgendamentoDTO agendamento) {
-		Agendamento obj = repository.findById(id).orElseThrow(null);
+	public AgendamentoDTO update(Long id, AgendamentoDTO agendamento) throws Exception {
+		Agendamento obj = repository.findById(id)
+				.orElseThrow(() -> new AgendamentoNotFoundException("Agendamento com id " + id + " não foi encontrado."));
 		obj.setServicos(agendamento.getServicos());
 		obj.setData(agendamento.getData());
 		

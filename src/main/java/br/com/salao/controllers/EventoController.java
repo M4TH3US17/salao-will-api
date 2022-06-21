@@ -27,22 +27,22 @@ public class EventoController {
 	}
 	@ApiOperation("${evento.docs.findById}")
 	@GetMapping(value = "/{id}", produces = "application/json")
-	public ResponseEntity<EventoDTO> findById(@PathVariable("id") Long id){
+	public ResponseEntity<EventoDTO> findById(@PathVariable("id") Long id) throws Exception {
 		return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
 	}
 	@ApiOperation("${evento.docs.randomCostomerEvent}")
 	@GetMapping(value = "/cliente-aleatorio", produces = "application/json")
-	public ResponseEntity<EventoDTO> randomCostomerEvent(){
+	public ResponseEntity<EventoDTO> randomCostomerEvent() throws Exception {
 		return ResponseEntity.status(HttpStatus.OK).body(service.randomCostomerEvent());
 	}
 	@ApiOperation("${evento.docs.update}")
 	@PutMapping(value = "/atualizar/{id}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<EventoDTO> update(@PathVariable("id") Long id, @RequestBody EventoDTO evento){
+	public ResponseEntity<EventoDTO> update(@PathVariable("id") Long id, @RequestBody EventoDTO evento) throws Exception {
 		return ResponseEntity.status(HttpStatus.OK).body(service.update(id, evento));
 	}
 	@ApiOperation("${evento.docs.resetEventInformation}")
 	@PutMapping(value = "/resetar/{id}", produces = "application/json")
-	public ResponseEntity<EventoDTO> resetEventInformation(@PathVariable("id") Long id){
+	public ResponseEntity<EventoDTO> resetEventInformation(@PathVariable("id") Long id) throws Exception {
 		return ResponseEntity.status(HttpStatus.OK).body(service.resetEventInformation(id));
 	}
 }

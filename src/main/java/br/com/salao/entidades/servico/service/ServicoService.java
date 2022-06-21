@@ -2,6 +2,7 @@ package br.com.salao.entidades.servico.service;
 
 import javax.transaction.Transactional;
 
+import br.com.salao.entidades.servico.core.exceptions.ServicoNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.Modifying;
@@ -28,25 +29,29 @@ public class ServicoService {
 		return repository.findByNameAndCategoria(name, category, pageable);
 	}
 	
-	public Servico findById(Long id) {
-		Servico obj = repository.findById(id).orElse(new Servico());
+	public Servico findById(Long id) throws Exception {
+		Servico obj = repository.findById(id)
+				.orElseThrow(() -> new ServicoNotFoundException("Servico com id "+id+" não existe."));
 		return obj;
 	}
 	
 	@Transactional
-	public Servico save(Servico obj) {
-		return repository.save(obj);
+	public Servico save(Servico servico) {
+		return repository.save(servico);
 	}
 	
 	@Transactional
-	public void deleteById(Long id) {
+	public void deleteById(Long id) throws Exception {
+		repository.findById(id)
+				.orElseThrow(() -> new ServicoNotFoundException("Servico com id "+id+" não existe."));
 		repository.deleteById(id);
 	}
 	
 	@Modifying
 	@Transactional
-	public Servico update(Long id, Servico obj) {
-		repository.findById(id).orElseThrow(null);
+	public Servico update(Long id, Servico obj) throws Exception {
+		repository.findById(id)
+				.orElseThrow(() -> new ServicoNotFoundException("Servico com id "+id+" não existe."));
 		Servico entity = repository.getById(id);
 		updateData(entity, obj);
 		return repository.save(entity);

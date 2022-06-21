@@ -46,31 +46,32 @@ public class ClienteController {
 	}
 	@ApiOperation("${cliente.docs.findByLogin}")
 	@GetMapping(value = "/{login}", produces = "application/json")
-	public ResponseEntity<ClienteDTO> findByLogin(@PathVariable String login){
+	public ResponseEntity<ClienteDTO> findByLogin(@PathVariable String login) throws Exception {
 		return ResponseEntity.ok().body(service.findByLogin(login));
 	}
 	@ApiOperation("${cliente.docs.save}")
 	@PostMapping(value = "/cadastro", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<ClienteDTO> save(@ApiParam("${cliente.docs.save.param}") @RequestBody ModifyClienteDTO obj) {
+	public ResponseEntity<ClienteDTO> save(@ApiParam("${cliente.docs.save.param}") @RequestBody ModifyClienteDTO obj)
+			throws Exception {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(obj));
 	}
 	@ApiOperation("${cliente.docs.deleteByLogin}")
 	@DeleteMapping(value = "/{login}", produces = "application/json")
-	public ResponseEntity<Void> deleteById(@PathVariable String login){
+	public ResponseEntity<Void> deleteById(@PathVariable String login) throws Exception {
 		service.deleteByLogin(login);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	@ApiOperation("${cliente.docs.update}")
 	@PutMapping(value = "/{login}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<ClienteDTO> update(@PathVariable String login,
-											 @RequestBody ModifyClienteDTO obj){
+											 @RequestBody ModifyClienteDTO obj) throws Exception {
 		return ResponseEntity.ok().body(service.update(login, obj));
 	}
 	@ApiOperation("${cliente.docs.confirmEmail}")
 	@PutMapping(value = "/confirmar/{login}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<String> confirmEmail(@PathVariable("login") String login,
 											   @ApiParam("${cliente.docs.confirmEmail.param}")
-											   @RequestBody ConfirmationEmailDTO code){
+											   @RequestBody ConfirmationEmailDTO code) throws Exception {
 		return ResponseEntity.ok().body(service.confirmEmail(login, code));
 	}
 	@ApiOperation("${cliente.docs.auth}")
