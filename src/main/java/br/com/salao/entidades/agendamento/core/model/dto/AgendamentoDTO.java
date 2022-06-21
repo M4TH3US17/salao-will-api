@@ -10,12 +10,10 @@ import br.com.salao.entidades.agendamento.core.model.Agendamento;
 import br.com.salao.entidades.cliente.core.model.Cliente;
 import br.com.salao.entidades.cliente.core.model.dto.ClienteDTO;
 import br.com.salao.entidades.servico.core.model.Servico;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Data
+@NoArgsConstructor @AllArgsConstructor
 public class AgendamentoDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -29,10 +27,10 @@ public class AgendamentoDTO implements Serializable {
 	private List<Servico> servicos;
 	
 	public AgendamentoDTO(Agendamento agendamento, Cliente cliente) {
-		id = agendamento.getId();
-		data = agendamento.getData();
-		total = agendamento.getTotal();
-		servicos = agendamento.getServicos();
+		id         = agendamento.getId();
+		data       = agendamento.getData();
+		total      = agendamento.getTotal();
+		servicos   = agendamento.getServicos();
 		this.cliente = new ClienteDTO(cliente);
 	}
 }

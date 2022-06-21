@@ -28,25 +28,28 @@ public class AgendamentoService {
 	private ModelMapper modelMapper;
 
 	public Page<AgendamentoDTO> findByPagination(Pageable pageable) {
-		return repository.findAll(pageable).map(agendamento -> modelMapper.map(agendamento, AgendamentoDTO.class));
+		return repository.findAll(pageable)
+				.map(obj -> modelMapper.map(obj, AgendamentoDTO.class));
 	}
 
 	public Page<AgendamentoDTO> findAllSchedulingByDate(LocalDate date, Pageable pageable) {
-		return repository.findAllSchedulingByDate(date, pageable).map(agendamento -> modelMapper.map(agendamento, AgendamentoDTO.class));
+		return repository.findAllSchedulingByDate(date, pageable)
+				.map(obj -> modelMapper.map(obj, AgendamentoDTO.class));
 	}
 
 	public AgendamentoDTO findById(Long id) {
-		Agendamento agendamento = repository.findById(id)
+		return repository.findById(id).map(obj -> modelMapper.map(obj, AgendamentoDTO.class))
 				.orElseThrow(null);
-		return modelMapper.map(agendamento, AgendamentoDTO.class);
 	}
 
 	@Transactional
-	public AgendamentoDTO save(Agendamento obj) {
-		obj.setServicos(servicoRepository.findAllById(obj.getServicos().stream().map(servico -> servico.getId())
+	public AgendamentoDTO save(AgendamentoDTO agendamento) {
+		Agendamento entity = modelMapper.map(agendamento, Agendamento.class);
+		entity.setServicos(servicoRepository
+				.findAllById(entity.getServicos().stream().map(servico -> servico.getId())
 				.collect(Collectors.toList())));
 
-		return modelMapper.map(repository.save(obj), AgendamentoDTO.class);
+		return modelMapper.map(repository.save(entity), AgendamentoDTO.class);
 	}
 
 	@Transactional
@@ -62,13 +65,12 @@ public class AgendamentoService {
 
 	@Modifying
 	@Transactional
-	public AgendamentoDTO update(Long id, Agendamento obj) {
-		Agendamento agendamento = repository.findById(id)
-				.orElseThrow(null);
-		agendamento.setServicos(obj.getServicos());
-		agendamento.setData(obj.getData());
+	public AgendamentoDTO update(Long id, AgendamentoDTO agendamento) {
+		Agendamento obj = repository.findById(id).orElseThrow(null);
+		obj.setServicos(agendamento.getServicos());
+		obj.setData(agendamento.getData());
 		
-		return modelMapper.map(repository.save(agendamento), AgendamentoDTO.class);
+		return modelMapper.map(repository.save(obj), AgendamentoDTO.class);
 	}
 
 }

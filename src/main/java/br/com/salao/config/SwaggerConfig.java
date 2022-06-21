@@ -34,8 +34,8 @@ public class SwaggerConfig {
 
     private ApiInfo informationsApi() {
         return new ApiInfoBuilder()
-                .title("Backend Salão Will")
-                .description("API para salão de beleza que desenvolvi para minha mãe.")
+                .title("Backend Beauty Salon")
+                .description("Beauty salon REST API I developed to help my mother's work.")
                 .version("1.0")
                 .contact(myContact())
                 .build();

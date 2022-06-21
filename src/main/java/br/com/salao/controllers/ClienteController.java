@@ -1,8 +1,13 @@
 package br.com.salao.controllers;
 
+import br.com.salao.entidades.cliente.core.model.dto.ModifyClienteDTO;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -28,46 +33,50 @@ import br.com.salao.entidades.email.core.model.dto.ConfirmationEmailDTO;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/v1/clientes")
+@PropertySource("classpath:utils/documentation.properties")
 public class ClienteController {
 	
 	@Autowired
 	private ClienteService service;
 
-	@ApiOperation("Retorna uma lista paginada de clientes.")
+	@ApiOperation("${cliente.docs.findByPagination}")
 	@GetMapping(value = "/pagination", produces = "application/json")
-	public ResponseEntity<Page<ClienteDTO>> findByPagination (Pageable pageable){
+	public ResponseEntity<Page<ClienteDTO>> findByPagination(Pageable pageable){
 		return ResponseEntity.ok().body(service.findByPagination(pageable));
 	}
-	@ApiOperation("Pesquisa um cliente pelo login (nome).")
+	@ApiOperation("${cliente.docs.findByLogin}")
 	@GetMapping(value = "/{login}", produces = "application/json")
-	public ResponseEntity<ClienteDTO> findByLogin (@PathVariable String login){
+	public ResponseEntity<ClienteDTO> findByLogin(@PathVariable String login){
 		return ResponseEntity.ok().body(service.findByLogin(login));
 	}
-	@ApiOperation("Cadastra/salva um novo cliente.")
+	@ApiOperation("${cliente.docs.save}")
 	@PostMapping(value = "/cadastro", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<ClienteDTO> save(@RequestBody Cliente obj) {
+	public ResponseEntity<ClienteDTO> save(@ApiParam("${cliente.docs.save.param}") @RequestBody ModifyClienteDTO obj) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(obj));
 	}
-	@ApiOperation("Deleta um cliente através do login.")
+	@ApiOperation("${cliente.docs.deleteByLogin}")
 	@DeleteMapping(value = "/{login}", produces = "application/json")
 	public ResponseEntity<Void> deleteById(@PathVariable String login){
 		service.deleteByLogin(login);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
-	@ApiOperation("Atualiza um determinado cliente.")
+	@ApiOperation("${cliente.docs.update}")
 	@PutMapping(value = "/{login}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<ClienteDTO> update(@PathVariable String login, @RequestBody Cliente obj){
+	public ResponseEntity<ClienteDTO> update(@PathVariable String login,
+											 @RequestBody ModifyClienteDTO obj){
 		return ResponseEntity.ok().body(service.update(login, obj));
 	}
-	@ApiOperation("Realiza a confirmação de email do cliente. Deverá ser passado o código de confirmação.")
-	@PutMapping(value = "/confirmar/{user}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<String> confirmEmail(@PathVariable("user") String user, 
-			@RequestBody ConfirmationEmailDTO code){
-		return ResponseEntity.ok().body(service.confirmEmail(user, code));
+	@ApiOperation("${cliente.docs.confirmEmail}")
+	@PutMapping(value = "/confirmar/{login}", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<String> confirmEmail(@PathVariable("login") String login,
+											   @ApiParam("${cliente.docs.confirmEmail.param}")
+											   @RequestBody ConfirmationEmailDTO code){
+		return ResponseEntity.ok().body(service.confirmEmail(login, code));
 	}
-	@ApiOperation("Realiza a autenticação de usuário. Informe o login e senha.")
+	@ApiOperation("${cliente.docs.auth}")
 	@PostMapping(value = "/auth", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<TokenDTO> authenticate(@RequestBody CredentialsDTO credentials) throws Exception {
+	public ResponseEntity<TokenDTO> authenticate(@ApiParam("${cliente.docs.auth.param}") @RequestBody CredentialsDTO credentials)
+			throws Exception {
 		return ResponseEntity.ok(service.authenticate(new Cliente(credentials.getLogin(), credentials.getSenha())));
 	} 
 }

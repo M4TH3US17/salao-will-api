@@ -23,7 +23,7 @@
 
 <h2>📋 Documentation</h2>
 <p>
-  To access the documentation just clone the project (git clone https://github.com/M4TH3US17/salao-will-api), run the project and access the URL below. 
+  To access the documentation just clone the project (<code>git clone https://github.com/M4TH3US17/salao-will-api</code>), run the project and access the URL below. 
   Detail: use intelliJ.
 </p>
 <pre>

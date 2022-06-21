@@ -3,6 +3,7 @@ package br.com.salao.controllers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -14,45 +15,46 @@ import br.com.salao.entidades.servico.service.ServicoService;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/v1/servicos")
+@PropertySource("classpath:utils/documentation.properties")
 public class ServicoController {
 
 	@Autowired
 	private ServicoService service;
-	@ApiOperation("Retorna uma lista paginada de serviços do salão.")
+	@ApiOperation("${servico.docs.findByPagination}")
 	@GetMapping(value = "/pagination", produces = "application/json")
 	public ResponseEntity<Page<Servico>> findByPagination(Pageable pageable){
 		return ResponseEntity.ok().body(service.findByPagination(pageable));
 	}
-	@ApiOperation("Retorna uma lista de serviços filtrada por categoria.")
+	@ApiOperation("${servico.docs.findAllByCategory}")
 	@GetMapping(value = "/categoria/{categoria}")
 	public ResponseEntity<Page<Servico>> findAllByCategory(@PathVariable("categoria") String categoria, Pageable pageable){
 		return ResponseEntity.ok().body(service.findAllByCategory(categoria, pageable));
 	}
-	@ApiOperation("Retorna uma lista de serviços filtrada por nome e categoria.")
+	@ApiOperation("${servico.docs.findByNameAndCategory}")
 	@GetMapping(produces = "application/json")
 	public ResponseEntity<Page<Servico>> findByNameAndCategory(@RequestParam String name,
 			@RequestParam String category, Pageable pageable){
 		return ResponseEntity.ok().body(service. findByName(name, category, pageable));
 	}
-	@ApiOperation("Pesquisa um serviço por id.")
+	@ApiOperation("${servico.docs.findById}")
 	@GetMapping(value = "/{id}", produces = "application/json")
 	public ResponseEntity<Servico> findById(@PathVariable Long id) {
 		return ResponseEntity.ok().body(service.findById(id));
 	}
-	@ApiOperation("Registra um novo serviço.")
+	@ApiOperation("${servico.docs.save}")
 	@PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Servico> save(@RequestBody Servico obj){
-		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(obj));
+	public ResponseEntity<Servico> save(@RequestBody Servico servico){
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(servico));
 	}
-	@ApiOperation("Deleta um serviço por id")
+	@ApiOperation("${servico.docs.deleteById}")
 	@DeleteMapping(value = "/{id}", produces = "application/json")
 	public ResponseEntity<Void> deleteById(@PathVariable Long id){
 		service.deleteById(id);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
-	@ApiOperation("Atualiza serviço.")
+	@ApiOperation("${servico.docs.update}")
 	@PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Servico> update (@PathVariable Long id, @RequestBody Servico obj){
-		return ResponseEntity.ok().body(service.update(id, obj));
+	public ResponseEntity<Servico> update(@PathVariable Long id, @RequestBody Servico servico){
+		return ResponseEntity.ok().body(service.update(id, servico));
 	}
 }

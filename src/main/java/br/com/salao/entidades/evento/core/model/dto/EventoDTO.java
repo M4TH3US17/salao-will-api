@@ -35,7 +35,7 @@ public class EventoDTO implements Serializable {
 				this.participantes = evento.getParticipantes().stream().map(x -> new ClienteDTO(x))
 						.collect(Collectors.toList());
 			}
-			id = evento.getId();
+			id  = evento.getId();
 			nome = evento.getNome();
 			imagem = evento.getImagem();
 			data = evento.getData();

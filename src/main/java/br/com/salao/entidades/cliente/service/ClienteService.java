@@ -4,7 +4,7 @@ import java.util.Random;
 
 import javax.transaction.Transactional;
 
-import br.com.salao.config.email.system.EmailBuilder;
+import br.com.salao.entidades.cliente.core.model.dto.ModifyClienteDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -58,8 +58,9 @@ public class ClienteService {
 	}
 
 	@Transactional
-	public ClienteDTO save(Cliente obj) {
+	public ClienteDTO save(ModifyClienteDTO cliente) {
 		/*repository.findById(obj.getLogin()).orElseThrow(null);*/
+		Cliente obj = modelMapper.map(cliente, Cliente.class);
 		obj.setSenha(encoder.encode(obj.getSenha()));
 		obj.getRoles().add(roleRepository.findRoleByNome("ROLE_USER"));
 
@@ -80,7 +81,7 @@ public class ClienteService {
 
 	@Modifying
 	@Transactional
-	public ClienteDTO update(String login, Cliente obj) {
+	public ClienteDTO update(String login, ModifyClienteDTO obj) {
 		Cliente entity = repository.findById(login).orElseThrow(null);
 		updateData(entity, obj);
 		
@@ -114,7 +115,7 @@ public class ClienteService {
 		throw new PasswordInvalidException("Password Invalid");
 	}
 
-	private void updateData(Cliente entity, Cliente obj) {
+	private void updateData(Cliente entity, ModifyClienteDTO obj) {
 		entity.setContato(obj.getContato());
 		entity.setSenha(obj.getSenha());
 		entity.setFoto(obj.getFoto());
@@ -123,7 +124,7 @@ public class ClienteService {
 			if (entity.getEmailCliente().getEmail() != null) {
 				emailClienteRepository.deleteById(entity.getEmailCliente().getEmail());
 			}
-			EmailCliente email = obj.getEmailCliente();
+			EmailCliente email = modelMapper.map(obj.getEmailCliente(), EmailCliente.class);
 			randomCodeGenerator(email, false);
 			entity.setEmailCliente(email);
 			buildEmail.buildConfirmationEmail(obj.getEmailCliente().getEmail(), email.getConfirmationCode(), obj.getLogin());

@@ -44,9 +44,10 @@ public class EventoService {
 		return mapper.map(evento, EventoDTO.class);
 	}
 
-	public EventoDTO update(Long id, Evento event) {
+	public EventoDTO update(Long id, EventoDTO evento) {
 		Evento entity = repository.findById(id).orElseThrow(null);
-		updateData(entity, event);
+		Evento obj    = mapper.map(evento, Evento.class);
+		updateData(entity, obj);
 		
 		return mapper.map(repository.save(entity), EventoDTO.class);
 	}
@@ -79,7 +80,8 @@ public class EventoService {
 			buildEmail.buildAlertEventEmail(cliente.getEmailCliente().getEmail(), 
 					randomCostomerEvent.getPremio().getNome().toLowerCase(), cliente.getLogin());
 
-		return mapper.map(update(2L, randomCostomerEvent), EventoDTO.class);
+		EventoDTO evento = mapper.map(randomCostomerEvent, EventoDTO.class);
+		return update(2L, evento);
 	}
 	
 	/* métodos auxiliares*/
